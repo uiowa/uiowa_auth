@@ -1,0 +1,23 @@
+services:
+  logger.channel.uiowa_auth:
+    parent: logger.channel_base
+    arguments: ['uiowa_auth']
+  uiowa_auth.samlauth_subscriber:
+    class: Drupal\uiowa_auth\EventSubscriber\SamlauthSubscriber
+    arguments: [ '@config.factory', '@logger.channel.uiowa_auth', '@externalauth.authmap' ]
+    tags:
+      - { name: event_subscriber }
+  uiowa_auth.externalauth_subscriber:
+    class: Drupal\uiowa_auth\EventSubscriber\ExternalAuthSubscriber
+    arguments: [ '@config.factory', '@logger.channel.uiowa_auth', '@externalauth.authmap' ]
+    tags:
+      - { name: event_subscriber }
+  uiowa_auth.route_subscriber:
+    class: Drupal\uiowa_auth\EventSubscriber\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  uiowa_auth.samlauth_override:
+    class: Drupal\uiowa_auth\ConfigOverride\SamlauthOverride
+    arguments: [ '@app.root' ]
+    tags:
+      - { name: config.factory.override }

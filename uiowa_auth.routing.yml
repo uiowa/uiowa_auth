@@ -1,0 +1,7 @@
+uiowa_auth.settings:
+  path: '/admin/config/people/hawkid'
+  defaults:
+    _title: 'HawkID Authentication'
+    _form: 'Drupal\uiowa_auth\Form\HawkIDSettingsForm'
+  requirements:
+    _permission: 'administer hawkid configuration'

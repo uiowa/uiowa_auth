@@ -1,0 +1,25 @@
+{
+    "repositories": {
+        "uiowa_auth": {
+            "type": "path",
+            "url": "../uiowa_auth"
+        }
+    },
+    "require": {
+        "drupal/drupal": "^8.6",
+        "drush/drush": "^9",
+        "uiowa/uiowa_auth": "*"
+    },
+    "extra": {
+        "installer-paths": {
+            "docroot/core": ["type:drupal-core"],
+            "docroot/libraries/{$name}": ["type:drupal-library"],
+            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+            "docroot/profiles/{$name}": ["type:drupal-profile"],
+            "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"],
+            "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
+            "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"]
+        }
+    }
+}

@@ -1,0 +1,42 @@
+sudo: false
+
+language: php
+
+php:
+  - '7.1'
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+services:
+  - mysql
+
+matrix:
+  fast_finish: true
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require drupal/coder
+  - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
+  - phpcs --config-set ignore_warnings_on_exit 1
+  - phpcs --standard=Drupal,DrupalPractice . --ignore='*.css,*.md'
+
+install:
+  - export REPOS=$(composer config repositories)
+  - mv tests/build ../ && cd ../build
+  - export COMPOSER_HOME=$(pwd)
+  - echo "{\"repositories\":$REPOS}" > config.json
+  - composer install --no-suggest
+  - ./vendor/bin/drush --yes site:install rusty --db-url=mysql://root@localhost/drupal --site-name=TravisCI
+
+script:
+  - export SIMPLETEST_BASE_URL=http://localhost:8080
+  - export SIMPLETEST_DB=mysql://root@localhost/drupal
+  - export SYMFONY_DEPRECATIONS_HELPER=disabled
+  - ./vendor/bin/drush runserver --default-server=builtin 8080 &
+  - sleep 3
+  - ./vendor/bin/phpunit -c docroot/core/ docroot/profiles/rusty/tests
+

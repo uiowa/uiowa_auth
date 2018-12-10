@@ -1,0 +1,121 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for uiowa_auth module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Block\BlockPluginInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function uiowa_auth_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Remove access to login form fields to avoid users entering HawkID
+  // credentials. Access to these routes has also been disabled.
+  // @see: \Drupal\uiowa_auth\EventSubscriber\RouteSubscriber
+  $form['name']['#access'] = FALSE;
+  $form['pass']['#access'] = FALSE;
+  $form['actions']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function uiowa_auth_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form['form_id']['#id'] == 'edit-user-form') {
+    /* Adjust access to fields on the user edit form that are synced via SAML.
+     * Although the userprotect module adds permissions to edit name/pass, this
+     * is necessary since the 'Administer users' permission overrides those.
+     * Note the $form_id is user_form which doubles as the user register form.
+     */
+    if ($account = user_load_by_name($form['account']['name']['#default_value'])) {
+      if ($account->id() == 1) {
+        $form['#disabled'] = TRUE;
+        \Drupal::messenger()->addWarning(t('User 1 information should be changed via the command line.'));
+      }
+      else {
+        $form['account']['name']['#description'] = t('Usernames are synced after every successful HawkID login.');
+        $form['account']['name']['#disabled'] = TRUE;
+        $form['account']['mail']['#disabled'] = TRUE;
+        $form['account']['mail']['#description'] = t('Email addresses are synced after every successful HawkID login.');
+        $form['account']['current_pass']['#access'] = FALSE;
+        $form['account']['pass']['#access'] = FALSE;
+        $form['path']['#access'] = FALSE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Change the account name description to be more helpful.
+  $form['account']['name']['#description'] = t('Enter the HawkID of the user you wish to add. HawkIDs can be found using the <a href=":url">UIowa directory</a>.', [
+    ':url' => Url::fromUri('https://iam.uiowa.edu/whitepages/search')->toString(),
+  ]);
+
+  // The email field is required for non-admins but an issue exists for core.
+  // @see: https://www.drupal.org/project/drupal/issues/2992848.
+  $form['account']['mail']['#access'] = FALSE;
+  $form['account']['mail']['#value'] = uniqid('email_') . '@uiowa.edu';
+
+  // Notifications won't work since email is synced via SAML upon login.
+  $form['account']['notify']['#access'] = FALSE;
+
+  // Hide the password field and generate a random one since it is never used.
+  $pass = user_password(mt_rand(50, 60));
+  $form['account']['pass']['#access'] = FALSE;
+
+  $form['account']['pass']['#value'] = [
+    'pass1' => $pass,
+    'pass2' => $pass,
+  ];
+
+  // Hide the path field. The defaults are fine.
+  $form['path']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function uiowa_auth_block_view_user_login_block_alter(array &$build, BlockPluginInterface $block) {
+  $build['#pre_render'][] = '_uiowa_auth_user_login_block_pre_render';
+}
+
+/**
+ * Pre-render callback for user_login_block.
+ *
+ * @param array $build
+ *   The block build render array.
+ *
+ * @return array
+ *   The render array.
+ *
+ * @see uiowa_auth_block_view_user_login_block_alter()
+ */
+function _uiowa_auth_user_login_block_pre_render(array $build) {
+  if (\Drupal::currentUser()->isAnonymous()) {
+    if (isset($build['content']['user_links']['#items']['request_password'])) {
+      unset($build['content']['user_links']['#items']['request_password']);
+    }
+
+    $build['content']['hawkid'] = [
+      'message' => [
+        '#markup' => t('Click the link below to be redirected to the secure HawkID login page.'),
+        '#prefix' => '<p>',
+        '#suffix' => '</p>',
+      ],
+      'link' => [
+        '#type' => 'link',
+        '#title' => t('HawkID Login'),
+        '#url' => Url::fromRoute('samlauth.saml_controller_login'),
+      ],
+    ];
+
+    return $build;
+  }
+}
