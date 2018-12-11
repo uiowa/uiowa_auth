@@ -38,5 +38,5 @@ script:
   - export SYMFONY_DEPRECATIONS_HELPER=disabled
   - ./vendor/bin/drush runserver --default-server=builtin 8080 &
   - sleep 3
-  - ./vendor/bin/phpunit -c docroot/core/ docroot/profiles/rusty/tests
+  - ./vendor/bin/phpunit -c docroot/core/ docroot/modules/custom/uiowa_auth/tests
 
