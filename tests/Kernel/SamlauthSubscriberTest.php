@@ -33,6 +33,9 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->installSchema('externalauth', ['authmap']);
 
     $this->config = $this->container->get('config.factory');
+
+    $this->config->getEditable('samlauth.authentication')->set('user_name_attribute', 'name')->save();
+
     $this->config->getEditable('uiowa_auth.settings')->set('member_of_attribute', 'groups')->save();
     $this->config->getEditable('uiowa_auth.settings')->set('role_mappings', [
       'webmaster' => 'DN=web',
