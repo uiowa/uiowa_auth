@@ -7,7 +7,7 @@
     },
     "name": "uiowa/uiowa_auth",
     "description": "Disables Drupal authentication and implements HawkID SSO.",
-    "type": "drupal-module",
+    "type": "drupal-module-custom",
     "require": {
         "drupal/samlauth": "^1.3",
         "composer/installers": "^1.6"
