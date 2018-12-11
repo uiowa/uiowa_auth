@@ -30,7 +30,7 @@ install:
   - export COMPOSER_HOME=$(pwd)
   - echo "{\"repositories\":$REPOS}" > config.json
   - composer install --no-suggest
-  - ./vendor/bin/drush --yes site:install rusty --db-url=mysql://root@localhost/drupal --site-name=TravisCI
+  - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
 script:
   - export SIMPLETEST_BASE_URL=http://localhost:8080
