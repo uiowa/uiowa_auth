@@ -10,6 +10,7 @@
     "type": "drupal-custom-module",
     "require": {
         "drupal/samlauth": "^1.3",
-        "composer/installers": "^1.6"
+        "composer/installers": "^1.6",
+        "drupal/externalauth": "^1.1"
     }
 }
