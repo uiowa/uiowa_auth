@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\rusty\Kernel;
+namespace Drupal\Tests\uiowa_auth\Kernel;
 
 use Drupal\uiowa_auth\EventSubscriber\SamlauthSubscriber;
 use Drupal\user\Entity\User;

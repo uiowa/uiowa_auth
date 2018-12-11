@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\rusty\Unit;
+namespace Drupal\Tests\uiowa_auth\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\uiowa_auth\ConfigOverride\SamlauthOverride;
