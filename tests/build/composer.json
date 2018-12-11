@@ -6,7 +6,8 @@
         }
     },
     "require": {
-        "drupal/drupal": "^8.6",
+        "drupal-composer/drupal-scaffold": "^2.3",
+        "drupal/core": "^8.6",
         "drush/drush": "^9",
         "uiowa/uiowa_auth": "*"
     },
@@ -21,6 +22,10 @@
             "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
             "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"]
         }
+    },
+    "scripts": {
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "post-install-cmd": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
