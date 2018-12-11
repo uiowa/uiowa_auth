@@ -46,7 +46,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->authmap = $this->container->get('externalauth.authmap');
 
     $this->attributes = [
-      'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' => ['foo@uiowa.edu'],
+      'name' => ['foo@uiowa.edu'],
       'groups' => [
         'DN=web',
         'DN=foo',
@@ -91,7 +91,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     ]);
 
     $attributes = [
-      'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' => ['foo@uiowa.edu'],
+      'name' => ['foo@uiowa.edu'],
       'groups' => [
         'DN=bogus',
         'DN=foo',
@@ -141,7 +141,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->authmap->save($account, 'samlauth', 'foo', ['mapped' => ['webmaster', 'foo']]);
 
     $attributes = [
-      'urn:oid:1.3.6.1.4.1.5923.1.1.1.6' => ['foo@uiowa.edu'],
+      'name' => ['foo@uiowa.edu'],
       'groups' => [
         'DN=bogus',
         'DN=bar',
