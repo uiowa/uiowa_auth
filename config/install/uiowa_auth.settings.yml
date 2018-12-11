@@ -1,0 +1,3 @@
+member_of_attribute: 'urn:oid:2.5.4.31'
+role_mappings:
+  administrator: CN=ITS-WebServices,OU=Groups,OU=ITS,DC=iowa,DC=uiowa,DC=edu

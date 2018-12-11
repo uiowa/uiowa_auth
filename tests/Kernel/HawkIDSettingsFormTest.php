@@ -12,6 +12,7 @@ use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
  * @group kernel
  */
 class HawkIDSettingsFormTest extends EntityKernelTestBase {
+  protected $strictConfigSchema = FALSE;
 
   /**
    * Test form submits with valid values.
