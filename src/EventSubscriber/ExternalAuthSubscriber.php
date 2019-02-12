@@ -38,7 +38,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ExternalAuthEvents::LOGIN][] = ['onUserLogin'];
+    $events[ExternalAuthEvents::LOGIN][] = ['onUserLogin', 100];
     return $events;
   }
 
