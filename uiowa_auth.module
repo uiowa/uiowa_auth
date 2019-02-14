@@ -26,11 +26,7 @@ function uiowa_auth_form_user_login_form_alter(&$form, FormStateInterface $form_
  */
 function uiowa_auth_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form['form_id']['#id'] == 'edit-user-form') {
-    /* Adjust access to fields on the user edit form that are synced via SAML.
-     * Although the userprotect module adds permissions to edit name/pass, this
-     * is necessary since the 'Administer users' permission overrides those.
-     * Note the $form_id is user_form which doubles as the user register form.
-     */
+    // Adjust access to fields on the user edit form that are synced via SAML.
     if ($account = user_load_by_name($form['account']['name']['#default_value'])) {
       if ($account->id() == 1) {
         $form['#disabled'] = TRUE;
