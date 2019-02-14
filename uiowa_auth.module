@@ -49,18 +49,16 @@ function uiowa_auth_form_user_form_alter(&$form, FormStateInterface $form_state,
  * Implements hook_form_FORM_ID_alter().
  */
 function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Change the account name description to be more helpful.
-  $form['account']['name']['#description'] = t('Enter the HawkID of the user you wish to add. HawkIDs can be found using the <a href=":url">UIowa directory</a>.', [
+  // Require the mail since that is what accounts are linked on.
+  $form['account']['mail']['#required'] = TRUE;
+  $form['account']['mail']['#title'] = t('UIowa email address');
+  $form['account']['mail']['#description'] = t('A valid UIowa email address. This must match exactly for the user account to be linked correctly. Email addresses can be found using the <a href=":url">UIowa directory</a>.', [
     ':url' => Url::fromUri('https://iam.uiowa.edu/whitepages/search')->toString(),
   ]);
 
-  // The email field is required for non-admins but an issue exists for core.
-  // @see: https://www.drupal.org/project/drupal/issues/2992848.
-  $form['account']['mail']['#access'] = FALSE;
-  $form['account']['mail']['#value'] = uniqid('email_') . '@uiowa.edu';
-
-  // Notifications won't work since email is synced via SAML upon login.
-  $form['account']['notify']['#access'] = FALSE;
+  $form['account']['name']['#description'] = t('Enter the HawkID of the user you wish to add. HawkIDs can be found using the <a href=":url">UIowa directory</a>.', [
+    ':url' => Url::fromUri('https://iam.uiowa.edu/whitepages/search')->toString(),
+  ]);
 
   // Hide the password field and generate a random one since it is never used.
   $pass = user_password(mt_rand(50, 60));
