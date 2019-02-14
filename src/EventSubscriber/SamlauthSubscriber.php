@@ -101,7 +101,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    */
   public function onUserLink(SamlauthUserLinkEvent $event) {
     // Prevent account creation for unlinked accounts.
-    if ($event->getLinkedAccount() === FALSE) {
+    if (!$event->getLinkedAccount()) {
       // @todo: log a message here.
       throw new ExternalAuthRegisterException();
     }
