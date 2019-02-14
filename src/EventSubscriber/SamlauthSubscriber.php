@@ -40,8 +40,8 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[SamlauthEvents::USER_SYNC][] = ['onUserSync', 100];
-    $events[SamlauthEvents::USER_LINK][] = ['onUserLink', 100];
+    $events[SamlauthEvents::USER_SYNC][] = ['onUserSync'];
+    $events[SamlauthEvents::USER_LINK][] = ['onUserLink'];
     return $events;
   }
 
