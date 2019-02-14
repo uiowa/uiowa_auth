@@ -30,7 +30,7 @@ function uiowa_auth_form_user_form_alter(&$form, FormStateInterface $form_state,
     if ($account = user_load_by_name($form['account']['name']['#default_value'])) {
       if ($account->id() == 1) {
         $form['#disabled'] = TRUE;
-        \Drupal::messenger()->addWarning(t('User 1 information should be changed via the command line.'));
+        \Drupal::messenger()->addWarning(t('User 1 information should not be changed.'));
       }
       else {
         $form['account']['name']['#description'] = t('Usernames are synced after every successful HawkID login.');
