@@ -18,6 +18,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
   protected $logger;
   protected $account;
   protected $authmap;
+  protected $entityTypeManager;
   protected $event;
   protected $attributes;
 
@@ -44,6 +45,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $this->logger = $this->createMock('Psr\Log\LoggerInterface');
     $this->authmap = $this->container->get('externalauth.authmap');
+    $this->entityTypeManager = $this->container->get('entity_type.manager');
 
     $this->attributes = [
       'name' => ['foo@uiowa.edu'],
@@ -74,7 +76,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       ->method('getAccount')
       ->will($this->returnValue($account));
 
-    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap);
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($this->event);
     $this->assertEquals('foo', $account->getAccountName());
     $this->assertTrue($account->hasRole('webmaster'));
@@ -108,7 +110,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       ->method('getAccount')
       ->will($this->returnValue($account));
 
-    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap);
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($event);
     $this->assertEquals('foo', $account->getAccountName());
     $this->assertFalse($account->hasRole('webmaster'));
@@ -126,7 +128,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       ->method('getAccount')
       ->will($this->returnValue($account));
 
-    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap);
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($this->event);
     $this->assertEquals('foo', $account->getAccountName());
     $this->assertTrue($account->hasRole('webmaster'));
@@ -158,7 +160,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       ->method('getAccount')
       ->will($this->returnValue($account));
 
-    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap);
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($event);
     $this->assertEquals('foo', $account->getAccountName());
     $this->assertFalse($account->hasRole('webmaster'));
@@ -168,13 +170,20 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
   /**
    * Test unlinked account does not get created.
    */
-  public function testUserLinkFailsForUnlinkedAccounts() {
-    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap);
+  public function testUserLinkFailsForUnlinkedAccountWithNoMappings() {
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $event = $this->createMock('Drupal\samlauth\Event\SamlauthUserLinkEvent');
 
     $event->expects($this->any())
+      ->method('getAttributes')
+      ->will($this->returnValue([
+        'name' => ['foo@uiowa.edu'],
+        'groups' => [],
+      ]));
+
+    $event->expects($this->any())
       ->method('getLinkedAccount')
-      ->will($this->returnValue(FALSE));
+      ->will($this->returnValue(NULL));
 
     $this->setExpectedException('Drupal\externalauth\Exception\ExternalAuthRegisterException');
     $sut->onUserLink($event);
