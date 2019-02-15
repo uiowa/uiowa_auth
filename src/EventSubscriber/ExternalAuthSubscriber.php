@@ -56,12 +56,12 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
     $mappings = $this->config->get('role_mappings');
 
     $data = [
-      'mapped' => [],
+      'uiowa_auth_mappings' => [],
     ];
 
     foreach ($mappings as $rid => $dn) {
       if ($account->hasRole($rid)) {
-        $data['mapped'][] = $rid;
+        $data['uiowa_auth_mappings'][] = $rid;
       }
     }
 
