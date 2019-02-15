@@ -60,11 +60,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
   public function onUserSync(SamlauthUserSyncEvent $event) {
     $account = $event->getAccount();
     $attributes = $event->getAttributes();
-
-    // Transform the authname to a HawkID.
-    $attr = $this->config->get('samlauth.authentication')->get('user_name_attribute');
-    $authname = $attributes[$attr][0];
-    $hawkid = stristr($authname, '@uiowa.edu', TRUE);
+    $hawkid = $this->getHawkId($attributes);
     $account->setUsername($hawkid);
 
     // Revoke all previously-mapped roles for existing users.
@@ -113,4 +109,21 @@ class SamlauthSubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Transform the authname to a HawkID.
+   *
+   * @param $attributes
+   *  SAML attributes to parse.
+   *
+   * @return string
+   */
+  public function getHawkId($attributes) {
+    if ($attr = $this->config->get('samlauth.authentication')->get('user_name_attribute')) {
+      $authname = $attributes[$attr][0];
+      return stristr($authname, '@uiowa.edu', TRUE);
+    }
+    else {
+      $this->logger->error(t('No user name attribute is set in SAML configuration. Unable to link account.'));
+    }
+  }
 }
