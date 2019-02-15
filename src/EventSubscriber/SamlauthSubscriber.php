@@ -2,6 +2,8 @@
 
 namespace Drupal\uiowa_auth\EventSubscriber;
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Exception\ExternalAuthRegisterException;
 use Drupal\samlauth\Event\SamlauthEvents;
@@ -19,6 +21,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
   protected $config;
   protected $logger;
   protected $authmap;
+  protected $entityTypeManager;
 
   /**
    * Constructor.
@@ -29,11 +32,14 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    *   Logger interface.
    * @param \Drupal\externalauth\Authmap $authmap
    *   Authmap service.
+   * @param \Drupal\Core\Entity\EntityTypeManager
+   *   The EntityTypeManager service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap) {
+  public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap, EntityTypeManager $entityTypeManager) {
     $this->config = $config_factory;
     $this->logger = $logger;
     $this->authmap = $authmap;
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
