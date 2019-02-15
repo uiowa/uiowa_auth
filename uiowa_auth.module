@@ -132,9 +132,10 @@ function _uiowa_auth_user_login_block_pre_render(array $build) {
 /**
  * Helper to alter name field that defines a user mapping.
  *
- * @param $form
+ * @param array $form
+ *   The form that contains the name field to modify.
  */
-function _uiowa_auth_alter_name_field(&$form) {
+function _uiowa_auth_alter_name_field(array &$form) {
   $form['account']['name']['#description'] = t('Enter the HawkID of the user you wish to add. HawkIDs can be found using the <a href=":url">UIowa directory</a>.', [
     ':url' => Url::fromUri('https://iam.uiowa.edu/whitepages/search')->toString(),
   ]);

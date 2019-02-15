@@ -2,7 +2,6 @@
 
 namespace Drupal\uiowa_auth\EventSubscriber;
 
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Exception\ExternalAuthRegisterException;
@@ -32,7 +31,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    *   Logger interface.
    * @param \Drupal\externalauth\Authmap $authmap
    *   Authmap service.
-   * @param \Drupal\Core\Entity\EntityTypeManager
+   * @param \Drupal\Core\Entity\EntityTypeManager $entityTypeManager
    *   The EntityTypeManager service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap, EntityTypeManager $entityTypeManager) {
@@ -102,12 +101,14 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    *   The SamlauthUserLinkEvent.
    *
    * @throws ExternalAuthRegisterException
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function onUserLink(SamlauthUserLinkEvent $event) {
     $sync = FALSE;
     $attributes = $event->getAttributes();
 
-    /**
+    /*
      * Prevent account creation for unlinked accounts that:
      * - do not already exist
      * - do not have a valid role mapping
@@ -117,7 +118,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
     if (!$event->getLinkedAccount()) {
       $hawkid = $this->getHawkId($attributes);
 
-       /** @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
+      /* @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
       $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $hawkid]);
 
       if (!empty($search)) {
@@ -146,9 +147,9 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       }
 
       if ($sync === FALSE) {
-        $this->logger->error(t('HawkID @hawkid has no existing account or valid role mappings.', [
+        $this->logger->error('HawkID @hawkid has no existing account or valid role mappings.', [
           '@hawkid' => $hawkid,
-        ]));
+        ]);
 
         throw new ExternalAuthRegisterException();
       }
@@ -158,18 +159,20 @@ class SamlauthSubscriber implements EventSubscriberInterface {
   /**
    * Transform the authname to a HawkID.
    *
-   * @param $attributes
-   *  SAML attributes to parse.
+   * @param array $attributes
+   *   SAML attributes to parse.
    *
    * @return string
+   *   The HawkID.
    */
-  public function getHawkId($attributes) {
+  public function getHawkId(array $attributes) {
     if ($attr = $this->config->get('samlauth.authentication')->get('user_name_attribute')) {
       $authname = $attributes[$attr][0];
       return stristr($authname, '@uiowa.edu', TRUE);
     }
     else {
-      $this->logger->error(t('No user name attribute is set in SAML configuration. Unable to link account.'));
+      $this->logger->error('No user name attribute is set in SAML configuration. Unable to link account.');
     }
   }
+
 }
