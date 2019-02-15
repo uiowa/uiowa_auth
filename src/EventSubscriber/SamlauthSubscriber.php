@@ -104,10 +104,54 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    * @throws ExternalAuthRegisterException
    */
   public function onUserLink(SamlauthUserLinkEvent $event) {
-    // Prevent account creation for unlinked accounts.
+    $sync = FALSE;
+    $attributes = $event->getAttributes();
+
+    /**
+     * Prevent account creation for unlinked accounts that:
+     * - do not already exist
+     * - do not have a valid role mapping
+     *
+     * This prevents any HawkID user from creating an account with no role.
+     */
     if (!$event->getLinkedAccount()) {
-      // @todo: log a message here.
-      throw new ExternalAuthRegisterException();
+      $hawkid = $this->getHawkId($attributes);
+
+       /** @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
+      $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $hawkid]);
+
+      if (!empty($search)) {
+        // Link account if HawkID user already exists.
+        $account = reset($search);
+        $event->setLinkedAccount($account);
+        $sync = TRUE;
+      }
+      else {
+        // Allow account creation if at least one role mapping is valid.
+        $attr = $this->config->get('uiowa_auth.settings')->get('member_of_attribute');
+        $member_of = $attributes[$attr];
+        $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
+
+        foreach ($mappings as $rid => $dn) {
+          if (in_array($dn, $member_of)) {
+            $sync = TRUE;
+
+            $this->logger->notice('User @user has valid role mapping @rid => @dn. Allowing account creation.', [
+              '@user' => $hawkid,
+              '@rid' => $rid,
+              '@dn' => $dn,
+            ]);
+          }
+        }
+      }
+
+      if ($sync === FALSE) {
+        $this->logger->error(t('HawkID @hawkid has no existing account or valid role mappings.', [
+          '@hawkid' => $hawkid,
+        ]));
+
+        throw new ExternalAuthRegisterException();
+      }
     }
   }
 
