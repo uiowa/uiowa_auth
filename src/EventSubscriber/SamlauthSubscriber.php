@@ -59,8 +59,6 @@ class SamlauthSubscriber implements EventSubscriberInterface {
   public function onUserSync(SamlauthUserSyncEvent $event) {
     $account = $event->getAccount();
     $attributes = $event->getAttributes();
-    $hawkid = $this->getHawkId($attributes);
-    $account->setUsername($hawkid);
 
     // Revoke all previously-mapped roles for existing users.
     if ($account->isNew() === FALSE) {
@@ -116,10 +114,11 @@ class SamlauthSubscriber implements EventSubscriberInterface {
      * This prevents any HawkID user from creating an account with no role.
      */
     if (!$event->getLinkedAccount()) {
-      $hawkid = $this->getHawkId($attributes);
+      $attr = $this->config->get('samlauth.authentication')->get('user_name_attribute');
+      $authname = $attributes[$attr][0];
 
       /* @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
-      $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $hawkid]);
+      $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $authname]);
 
       if (!empty($search)) {
         // Link account if HawkID user already exists.
@@ -138,7 +137,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
             $sync = TRUE;
 
             $this->logger->notice('User @user has valid role mapping @rid => @dn. Allowing account creation.', [
-              '@user' => $hawkid,
+              '@user' => $authname,
               '@rid' => $rid,
               '@dn' => $dn,
             ]);
@@ -148,30 +147,11 @@ class SamlauthSubscriber implements EventSubscriberInterface {
 
       if ($sync === FALSE) {
         $this->logger->error('HawkID @hawkid has no existing account or valid role mappings.', [
-          '@hawkid' => $hawkid,
+          '@hawkid' => $authname,
         ]);
 
         throw new ExternalAuthRegisterException();
       }
-    }
-  }
-
-  /**
-   * Transform the authname to a HawkID.
-   *
-   * @param array $attributes
-   *   SAML attributes to parse.
-   *
-   * @return string
-   *   The HawkID.
-   */
-  public function getHawkId(array $attributes) {
-    if ($attr = $this->config->get('samlauth.authentication')->get('user_name_attribute')) {
-      $authname = $attributes[$attr][0];
-      return stristr($authname, '@uiowa.edu', TRUE);
-    }
-    else {
-      $this->logger->error('No user name attribute is set in SAML configuration. Unable to link account.');
     }
   }
 

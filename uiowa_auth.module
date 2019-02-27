@@ -40,7 +40,7 @@ function uiowa_auth_form_user_form_alter(&$form, FormStateInterface $form_state,
         \Drupal::messenger()->addWarning(t('User 1 information has been locked for security reasons.'));
       }
       else {
-        if ($authmap->getUid($account->getUsername() . '@uiowa.edu', 'samlauth') === FALSE) {
+        if ($authmap->getUid($account->getUsername(), 'samlauth') === FALSE) {
           _uiowa_auth_alter_name_field($form);
         }
         else {

@@ -48,7 +48,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->entityTypeManager = $this->container->get('entity_type.manager');
 
     $this->attributes = [
-      'name' => ['foo@uiowa.edu'],
+      'name' => ['foo'],
       'groups' => [
         'DN=web',
         'DN=foo',
@@ -78,7 +78,6 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($this->event);
-    $this->assertEquals('foo', $account->getAccountName());
     $this->assertTrue($account->hasRole('webmaster'));
     $this->assertFalse($account->hasRole('editor'));
   }
@@ -93,7 +92,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     ]);
 
     $attributes = [
-      'name' => ['foo@uiowa.edu'],
+      'name' => ['foo'],
       'groups' => [
         'DN=bogus',
         'DN=foo',
@@ -112,7 +111,6 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($event);
-    $this->assertEquals('foo', $account->getAccountName());
     $this->assertFalse($account->hasRole('webmaster'));
     $this->assertFalse($account->hasRole('editor'));
   }
@@ -130,7 +128,6 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($this->event);
-    $this->assertEquals('foo', $account->getAccountName());
     $this->assertTrue($account->hasRole('webmaster'));
     $this->assertFalse($account->hasRole('editor'));
   }
@@ -143,7 +140,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->authmap->save($account, 'samlauth', 'foo', ['mapped' => ['webmaster', 'foo']]);
 
     $attributes = [
-      'name' => ['foo@uiowa.edu'],
+      'name' => ['foo'],
       'groups' => [
         'DN=bogus',
         'DN=bar',
@@ -162,7 +159,6 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $sut->onUserSync($event);
-    $this->assertEquals('foo', $account->getAccountName());
     $this->assertFalse($account->hasRole('webmaster'));
     $this->assertFalse($account->hasRole('editor'));
   }
@@ -177,7 +173,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $event->expects($this->any())
       ->method('getAttributes')
       ->will($this->returnValue([
-        'name' => ['foo@uiowa.edu'],
+        'name' => ['foo'],
         'groups' => [],
       ]));
 
