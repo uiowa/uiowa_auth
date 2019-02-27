@@ -3,7 +3,6 @@ Disables Drupal authentication and implements HawkID SSO. Requires samlauth
 configuration for user name and email attributes. Includes a dynamic
 configuration override for samlauth.authentication.idp_x509_certificate.
 
-
 # Tests
 Tests should be run from the root of a Drupal 8 installation against the 
 default site, not a multisite.
