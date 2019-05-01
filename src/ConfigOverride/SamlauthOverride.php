@@ -61,7 +61,15 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
       // The samlauth module does not allow for file configuration like the SP.
       // This value will not be displayed on the configuration form since it is
       // an override.
-      $idp_cert = file_get_contents($this->appRoot . '/../vendor/onelogin/php-saml/certs/idp.crt');
+      $file = $this->appRoot . '/../vendor/onelogin/php-saml/certs/idp.crt';
+
+      if (file_exists($file)) {
+        $idp_cert = file_get_contents($file);
+      }
+      else {
+        $idp_cert = '';
+        $this->logger->warning('Unable to load IDP certificate from vendor directory.');
+      }
 
       $overrides['samlauth.authentication']['sp_entity_id'] = $sp;
       $overrides['samlauth.authentication']['idp_entity_id'] = $idp;
