@@ -18,8 +18,11 @@ class SamlauthOverrideTest extends UnitTestCase {
    * @dataProvider providerConfigByEnv
    */
   public function testConfigByEnv($env, $sp, $idp, $sso, $slo) {
-    $sut = new SamlauthOverride($this->root);
+    $logger = $this->createMock('Psr\Log\LoggerInterface');
+
+    $sut = new SamlauthOverride($this->root, $logger);
     putenv('AH_SITE_ENVIRONMENT=' . $env);
+
     file_put_contents($this->root . '/../vendor/onelogin/php-saml/certs/idp.crt', 'foo');
 
     $overrides = $sut->loadOverrides(['samlauth.authentication']);
