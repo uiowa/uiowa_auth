@@ -5,6 +5,7 @@ namespace Drupal\uiowa_auth\ConfigOverride;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Samlauth configuration overrides.
@@ -14,6 +15,7 @@ use Drupal\Core\Config\StorageInterface;
 class SamlauthOverride implements ConfigFactoryOverrideInterface {
 
   protected $appRoot;
+  protected $logger;
 
   /**
    * Constructor to inject dependencies.
@@ -21,8 +23,9 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
    * @param string $root
    *   The app.root service (SplString).
    */
-  public function __construct($root) {
+  public function __construct($root, LoggerInterface $logger) {
     $this->appRoot = $root;
+    $this->logger = $logger;
   }
 
   /**
