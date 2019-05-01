@@ -22,6 +22,8 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
    *
    * @param string $root
    *   The app.root service (SplString).
+   * @param Psr\Log\LoggerInterface $logger
+   *   The uiowa_auth logger channel.
    */
   public function __construct($root, LoggerInterface $logger) {
     $this->appRoot = $root;
