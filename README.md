@@ -1,6 +1,5 @@
 # uiowa_auth
-Disables Drupal authentication and implements HawkID SSO. Requires samlauth
-configuration for user name and email attributes. 
+Disables Drupal authentication and implements HawkID SSO. 
 
 # Tests
 Tests should be run from the root of a Drupal 8 installation against the 
