@@ -16,8 +16,3 @@ services:
     class: Drupal\uiowa_auth\EventSubscriber\RouteSubscriber
     tags:
       - { name: event_subscriber }
-  uiowa_auth.samlauth_override:
-    class: Drupal\uiowa_auth\ConfigOverride\SamlauthOverride
-    arguments: [ '@app.root', '@logger.channel.uiowa_auth' ]
-    tags:
-      - { name: config.factory.override }
