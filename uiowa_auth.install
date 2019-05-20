@@ -11,3 +11,28 @@
 function uiowa_auth_update_8001() {
   drupal_flush_all_caches();
 }
+
+/**
+ * Update active configuration to reflect role mapping data structure change.
+ */
+function uiowa_auth_update_8006() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('uiowa_auth.settings');
+
+  $mappings = $config->get('role_mappings');
+
+  if (!array_key_exists(0, $mappings)) {
+    $new = [];
+
+    foreach ($mappings as $rid => $dn) {
+      $new[] = "{$rid}|{$dn}";
+      \Drupal::logger('uiowa_auth')->notice('Updated role mapping configuration for @mapping.', [
+        '@mapping' => "{$rid} -> {$dn}",
+      ]);
+    }
+
+    $config
+      ->set('role_mappings', $new)
+      ->save();
+  }
+}
