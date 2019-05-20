@@ -15,7 +15,7 @@ function uiowa_auth_update_8001() {
 /**
  * Update active configuration to reflect role mapping data structure change.
  */
-function uiowa_auth_update_8006() {
+function uiowa_auth_update_8002() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('uiowa_auth.settings');
 
