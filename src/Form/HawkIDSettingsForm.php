@@ -66,7 +66,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $mappings = RoleMappings::stringToArray($form_state->getValue('role_mappings'));
+    $mappings = RoleMappings::textToArray($form_state->getValue('role_mappings'));
 
     foreach ($mappings as $mapping) {
       $parts = explode('|', $mapping);
@@ -87,7 +87,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $mappings = RoleMappings::stringToArray($form_state->getValue('role_mappings'));
+    $mappings = RoleMappings::textToArray($form_state->getValue('role_mappings'));
 
     $this->config('uiowa_auth.settings')
       ->set('role_mappings', $mappings)

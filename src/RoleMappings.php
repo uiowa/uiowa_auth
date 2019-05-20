@@ -21,7 +21,7 @@ class RoleMappings {
    * @return array
    *   Array of mappings.
    */
-  public static function stringToArray($mappings) {
+  public static function textToArray($mappings) {
     $mappings = explode(PHP_EOL, $mappings);
     $mappings = array_filter($mappings);
     $mappings = array_map('trim', $mappings);
