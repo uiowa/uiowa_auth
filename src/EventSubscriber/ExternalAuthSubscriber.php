@@ -6,6 +6,7 @@ use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Event\ExternalAuthEvents;
 use Drupal\externalauth\Event\ExternalAuthLoginEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\uiowa_auth\RoleMappings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
 
@@ -59,7 +60,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
       'uiowa_auth_mappings' => [],
     ];
 
-    foreach ($mappings as $rid => $dn) {
+    foreach (RoleMappings::generate($mappings) as $rid => $dn) {
       if ($account->hasRole($rid)) {
         $data['uiowa_auth_mappings'][] = $rid;
       }
