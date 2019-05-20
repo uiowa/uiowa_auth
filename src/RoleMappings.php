@@ -1,20 +1,16 @@
 <?php
-/**
- * @file
- * A utility class to assist with role mappings.
- */
 
 namespace Drupal\uiowa_auth;
 
 /**
- * Class RoleMappings.
+ * A utility class to assist with role mappings.
  */
-class RoleMappings
-{
+class RoleMappings {
+
   /**
    * Static class.
    */
-  public function __construct() {}
+  private function __construct() {}
 
   /**
    * Convert string of line-break delimited role mappings to array.
@@ -35,10 +31,13 @@ class RoleMappings
   /**
    * Convert array of role mappings to line-break delimited string.
    *
-   * @param $mappings
+   * @param array $mappings
+   *   Array of role mappings.
+   *
    * @return string
+   *   Line-break delimited string of role mappings.
    */
-  public static function arrayToText($mappings) {
+  public static function arrayToText(array $mappings) {
     $text = '';
 
     foreach ($mappings as $mapping) {
@@ -51,12 +50,12 @@ class RoleMappings
   }
 
   /**
-   * Generator to yield $rid => $dn from array of role mappings.
+   * Generator to yield properly keyed array of role mappings.
    *
-   * @param $mappings
-   * @return \Generator
+   * @param array $mappings
+   *   Array of role mappings.
    */
-  public static function generate($mappings) {
+  public static function generate(array $mappings) {
     foreach ($mappings as $mapping) {
       list($rid, $dn) = explode('|', $mapping);
       yield $rid => $dn;
