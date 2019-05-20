@@ -24,7 +24,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
     $form = [];
 
     $form_state->setValues([
-      'role_mappings' => 'admin|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|CN=foo,OU=bar',
+      'role_mappings' => 'admin|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux',
       'member_of_attribute' => 'baz',
     ]);
 
@@ -33,6 +33,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
 
     $this->assertEquals([
       'admin' => 'CN=foo,OU=bar,OU=baz',
+      'webmaster' => 'CN=baz,OU=qux',
       'webmaster' => 'CN=foo,OU=bar',
     ], $factory->get('uiowa_auth.settings')->get('role_mappings'));
 
