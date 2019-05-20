@@ -2,6 +2,8 @@ services:
   logger.channel.uiowa_auth:
     parent: logger.channel_base
     arguments: ['uiowa_auth']
+  uiowa_auth.role_mappings:
+    class: Drupal\uiowa_auth\RoleMappings
   uiowa_auth.samlauth_subscriber:
     class: Drupal\uiowa_auth\EventSubscriber\SamlauthSubscriber
     arguments: [ '@config.factory', '@logger.channel.uiowa_auth', '@externalauth.authmap', '@entity_type.manager' ]
