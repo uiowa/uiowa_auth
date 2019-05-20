@@ -32,9 +32,9 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
     $this->assertEquals(FALSE, $form_state->hasAnyErrors());
 
     $this->assertEquals([
-      'admin' => 'CN=foo,OU=bar,OU=baz',
-      'webmaster' => 'CN=baz,OU=qux',
-      'webmaster' => 'CN=foo,OU=bar',
+      'admin|CN=foo,OU=bar,OU=baz',
+      'webmaster|CN=foo,OU=bar',
+      'webmaster|CN=baz,OU=qux',
     ], $factory->get('uiowa_auth.settings')->get('role_mappings'));
 
     $this->assertEquals('baz', $factory->get('uiowa_auth.settings')->get('member_of_attribute'));
