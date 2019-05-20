@@ -4,6 +4,7 @@ namespace Drupal\uiowa_auth\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\uiowa_auth\RoleMappings;
 
 /**
  * Configure HawkID settings for this site.
@@ -30,14 +31,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $mappings = $this->config('uiowa_auth.settings')->get('role_mappings');
 
-    $text = '';
-
-    foreach ($mappings as $rid => $dn) {
-      $text .= "{$rid}|{$dn}";
-      $text .= PHP_EOL;
-    }
-
-    $text = rtrim($text);
+    $text = RoleMappings::arrayToText($mappings);
 
     $form['description'] = [
       '#markup' => $this->t('HawkID authenticated users can have a member-of
@@ -72,7 +66,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $mappings = $this->splitMappings($form_state->getValue('role_mappings'));
+    $mappings = RoleMappings::textToArray($form_state->getValue('role_mappings'));
 
     foreach ($mappings as $mapping) {
       $parts = explode('|', $mapping);
@@ -93,37 +87,14 @@ class HawkIDSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $mappings = $this->splitMappings($form_state->getValue('role_mappings'));
-
-    $config = [];
-
-    foreach ($mappings as $mapping) {
-      list($rid, $dn) = explode('|', $mapping);
-      $config[$rid] = $dn;
-    }
+    $mappings = RoleMappings::textToArray($form_state->getValue('role_mappings'));
 
     $this->config('uiowa_auth.settings')
-      ->set('role_mappings', $config)
+      ->set('role_mappings', $mappings)
       ->set('member_of_attribute', $form_state->getValue('member_of_attribute'))
       ->save();
 
     parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * Helper method to split string mappings into an array and clean.
-   *
-   * @param string $mappings
-   *   String of mappings delimited by PHP_EOL.
-   *
-   * @return array
-   *   Array of mappings.
-   */
-  public function splitMappings($mappings) {
-    $mappings = explode(PHP_EOL, $mappings);
-    $mappings = array_filter($mappings);
-    $mappings = array_map('trim', $mappings);
-    return $mappings;
   }
 
 }
