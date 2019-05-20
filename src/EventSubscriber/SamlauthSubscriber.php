@@ -68,7 +68,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       if (!empty($data['uiowa_auth_mappings'])) {
         foreach ($data['uiowa_auth_mappings'] as $rid) {
           $account->removeRole($rid);
-          $this->logger->notice('Revoked previously-mapped role @role for user @user so mapping is re-evaluated.', ['@role' => $rid, '@user' => $account->getUsername()]);
+          $this->logger->notice('Revoked previously-mapped role @role for user @user so mapping is re-evaluated.', ['@role' => $rid, '@user' => $account->getAccountName()]);
         }
       }
     }
