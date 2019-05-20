@@ -39,8 +39,8 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $this->config->getEditable('uiowa_auth.settings')->set('member_of_attribute', 'groups')->save();
     $this->config->getEditable('uiowa_auth.settings')->set('role_mappings', [
-      'webmaster' => 'DN=web',
-      'editor' => 'DN=edit',
+      'webmaster|DN=web',
+      'editor|DN=edit',
     ])->save();
 
     $this->logger = $this->createMock('Psr\Log\LoggerInterface');

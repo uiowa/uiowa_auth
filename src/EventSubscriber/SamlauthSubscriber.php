@@ -9,6 +9,7 @@ use Drupal\samlauth\Event\SamlauthEvents;
 use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\samlauth\Event\SamlauthUserLinkEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\uiowa_auth\RoleMappings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
 
@@ -77,7 +78,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
     $member_of = $attributes[$attr];
     $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
-    foreach ($mappings as $rid => $dn) {
+    foreach (RoleMappings::generate($mappings) as $rid => $dn) {
       if (!$account->hasRole($rid) && in_array($dn, $member_of)) {
         $account->addRole($rid);
         $this->logger->notice('Assigned role @role for user @user based on mapping @dn.', [
@@ -132,7 +133,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
         $member_of = $attributes[$attr];
         $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
-        foreach ($mappings as $rid => $dn) {
+        foreach (RoleMappings::generate($mappings) as $rid => $dn) {
           if (in_array($dn, $member_of)) {
             $sync = TRUE;
 
