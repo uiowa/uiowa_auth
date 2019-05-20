@@ -5,8 +5,14 @@ namespace Drupal\Tests\uiowa_auth\Unit;
 use Drupal\Tests\UnitTestCase;
 use Drupal\uiowa_auth\RoleMappings;
 
-class RoleMappingsTest extends UnitTestCase
-{
+/**
+ * Tests for RoleMappings utility class.
+ */
+class RoleMappingsTest extends UnitTestCase {
+
+  /**
+   * Test testTextToArray.
+   */
   public function testTextToArray() {
     $mappings = 'admin|CN=foo,OU=bar,OU=baz ' . PHP_EOL . ' webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux';
     $this->assertEquals(RoleMappings::textToArray($mappings), [
@@ -16,6 +22,9 @@ class RoleMappingsTest extends UnitTestCase
     ]);
   }
 
+  /**
+   * Test testArrayToText.
+   */
   public function testArrayToText() {
     $mappings = [
       'admin|CN=foo,OU=bar,OU=baz',
@@ -26,6 +35,9 @@ class RoleMappingsTest extends UnitTestCase
     $this->assertEquals(RoleMappings::arrayToText($mappings), 'admin|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux');
   }
 
+  /**
+   * Test generate.
+   */
   public function testGenerate() {
     $mappings = [
       'admin|CN=foo,OU=bar,OU=baz',
@@ -35,12 +47,12 @@ class RoleMappingsTest extends UnitTestCase
 
     $expected = [
       [
-        'rid' =>'admin',
-        'dn' => 'CN=foo,OU=bar,OU=baz'
+        'rid' => 'admin',
+        'dn' => 'CN=foo,OU=bar,OU=baz',
       ],
       [
         'rid' => 'webmaster',
-        'dn' => 'CN=foo,OU=bar'
+        'dn' => 'CN=foo,OU=bar',
       ],
       [
         'rid' => 'webmaster',
@@ -56,4 +68,5 @@ class RoleMappingsTest extends UnitTestCase
       $i++;
     }
   }
+
 }
