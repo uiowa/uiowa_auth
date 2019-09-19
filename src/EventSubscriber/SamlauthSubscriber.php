@@ -122,7 +122,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    * @param \Drupal\samlauth\Event\SamlauthUserLinkEvent $event
    *   The SamlauthUserLinkEvent.
    *
-   * @throws ExternalAuthRegisterException
+   * @throws \Drupal\externalauth\Exception\ExternalAuthRegisterException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
