@@ -38,11 +38,21 @@ function uiowa_auth_update_8002() {
 }
 
 /**
- * Remove deprecated member_of configuration.
+ * Update configuration to use new rid|attr|value format.
  */
 function uiowa_auth_update_8003() {
   $config_factory = \Drupal::configFactory();
   $config = $config_factory->getEditable('uiowa_auth.settings');
+  $attr = $config->get('member_of_attribute');
+
+  $mappings = [];
+
+  foreach ($config->get('role_mappings') as $mapping) {
+    list($rid, $value) = explode('|', $mapping);
+    $mappings[] = "{$rid}|{$attr}|{$value}";
+  }
+
+  $config->set('role_mappings', $mappings);
   $config->clear('member_of_attribute');
   $config->save();
 }
