@@ -15,13 +15,54 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
   protected $strictConfigSchema = FALSE;
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The user account.
+   *
+   * @var \Drupal\user\UserInterface
+   */
   protected $account;
+
+  /**
+   * The authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
+
+  /**
+   * The EntityTypeManager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
   protected $entityTypeManager;
+
+  /**
+   * The SamlauthUserSyncEvent.
+   *
+   * @var \Drupal\samlauth\Event\SamlauthUserSyncEvent
+   */
   protected $event;
+
+  /**
+   * Array of samlauth attributes.
+   *
+   * @var array
+   */
   protected $attributes;
 
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
   public static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
 
   /**

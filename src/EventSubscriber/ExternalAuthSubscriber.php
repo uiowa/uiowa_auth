@@ -15,8 +15,25 @@ use Psr\Log\LoggerInterface;
  */
 class ExternalAuthSubscriber implements EventSubscriberInterface {
 
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The externalauth authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
 
   /**

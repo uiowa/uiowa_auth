@@ -18,9 +18,32 @@ use Psr\Log\LoggerInterface;
  */
 class SamlauthSubscriber implements EventSubscriberInterface {
 
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The extnernalauth authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
+
+  /**
+   * The EntityTypeManager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
   protected $entityTypeManager;
 
   /**
