@@ -5,9 +5,9 @@
  * Install tasks.
  */
 
- /**
-  * Flush all caches to rebuild service container.
-  */
+/**
+ * Flush all caches to rebuild service container.
+ */
 function uiowa_auth_update_8001() {
   drupal_flush_all_caches();
 }
