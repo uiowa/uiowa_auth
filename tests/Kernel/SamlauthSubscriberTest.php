@@ -12,16 +12,60 @@ use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
  * @group kernel
  */
 class SamlauthSubscriberTest extends EntityKernelTestBase {
-
-  protected $strictConfigSchema = FALSE;
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The user account.
+   *
+   * @var \Drupal\user\UserInterface
+   */
   protected $account;
+
+  /**
+   * The authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
+
+  /**
+   * The EntityTypeManager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
   protected $entityTypeManager;
+
+  /**
+   * The SamlauthUserSyncEvent.
+   *
+   * @var \Drupal\samlauth\Event\SamlauthUserSyncEvent
+   */
   protected $event;
+
+  /**
+   * Array of samlauth attributes.
+   *
+   * @var array
+   */
   protected $attributes;
 
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
   public static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
 
   /**
@@ -34,13 +78,11 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
     $this->installSchema('externalauth', ['authmap']);
 
     $this->config = $this->container->get('config.factory');
-
     $this->config->getEditable('samlauth.authentication')->set('user_name_attribute', 'name')->save();
 
-    $this->config->getEditable('uiowa_auth.settings')->set('member_of_attribute', 'groups')->save();
     $this->config->getEditable('uiowa_auth.settings')->set('role_mappings', [
-      'webmaster|DN=web',
-      'editor|DN=edit',
+      'webmaster|groups|DN=web',
+      'editor|groups|DN=edit',
     ])->save();
 
     $this->logger = $this->createMock('Psr\Log\LoggerInterface');

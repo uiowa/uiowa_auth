@@ -5,9 +5,9 @@
  * Install tasks.
  */
 
- /**
-  * Flush all caches to rebuild service container.
-  */
+/**
+ * Flush all caches to rebuild service container.
+ */
 function uiowa_auth_update_8001() {
   drupal_flush_all_caches();
 }
@@ -35,4 +35,24 @@ function uiowa_auth_update_8002() {
       ->set('role_mappings', $new)
       ->save();
   }
+}
+
+/**
+ * Update configuration to use new rid|attr|value format.
+ */
+function uiowa_auth_update_8003() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('uiowa_auth.settings');
+  $attr = $config->get('member_of_attribute');
+
+  $mappings = [];
+
+  foreach ($config->get('role_mappings') as $mapping) {
+    list($rid, $value) = explode('|', $mapping);
+    $mappings[] = "{$rid}|{$attr}|{$value}";
+  }
+
+  $config->set('role_mappings', $mappings);
+  $config->clear('member_of_attribute');
+  $config->save();
 }

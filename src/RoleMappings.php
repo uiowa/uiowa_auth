@@ -41,8 +41,8 @@ class RoleMappings {
     $text = '';
 
     foreach ($mappings as $mapping) {
-      list($rid, $dn) = explode('|', $mapping);
-      $text .= "{$rid}|{$dn}";
+      list($rid, $attr, $value) = explode('|', $mapping);
+      $text .= "{$rid}|{$attr}|{$value}";
       $text .= PHP_EOL;
     }
 
@@ -57,8 +57,13 @@ class RoleMappings {
    */
   public static function generate(array $mappings) {
     foreach ($mappings as $mapping) {
-      list($rid, $dn) = explode('|', $mapping);
-      yield $rid => $dn;
+      list($rid, $attr, $value) = explode('|', $mapping);
+
+      yield [
+        'rid' => $rid,
+        'attr' => $attr,
+        'value' => $value,
+      ];
     }
   }
 

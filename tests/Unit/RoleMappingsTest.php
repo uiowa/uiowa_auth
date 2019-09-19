@@ -14,11 +14,11 @@ class RoleMappingsTest extends UnitTestCase {
    * Test testTextToArray.
    */
   public function testTextToArray() {
-    $mappings = 'admin|CN=foo,OU=bar,OU=baz ' . PHP_EOL . ' webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux';
+    $mappings = 'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz ' . PHP_EOL . ' webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar' . PHP_EOL . 'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux';
     $this->assertEquals(RoleMappings::textToArray($mappings), [
-      'admin|CN=foo,OU=bar,OU=baz',
-      'webmaster|CN=foo,OU=bar',
-      'webmaster|CN=baz,OU=qux',
+      'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz',
+      'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar',
+      'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux',
     ]);
   }
 
@@ -27,12 +27,12 @@ class RoleMappingsTest extends UnitTestCase {
    */
   public function testArrayToText() {
     $mappings = [
-      'admin|CN=foo,OU=bar,OU=baz',
-      'webmaster|CN=foo,OU=bar',
-      'webmaster|CN=baz,OU=qux',
+      'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz',
+      'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar',
+      'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux',
     ];
 
-    $this->assertEquals(RoleMappings::arrayToText($mappings), 'admin|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux');
+    $this->assertEquals(RoleMappings::arrayToText($mappings), 'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar' . PHP_EOL . 'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux');
   }
 
   /**
@@ -40,31 +40,35 @@ class RoleMappingsTest extends UnitTestCase {
    */
   public function testGenerate() {
     $mappings = [
-      'admin|CN=foo,OU=bar,OU=baz',
-      'webmaster|CN=foo,OU=bar',
-      'webmaster|CN=baz,OU=qux',
+      'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz',
+      'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar',
+      'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux',
     ];
 
     $expected = [
       [
         'rid' => 'admin',
-        'dn' => 'CN=foo,OU=bar,OU=baz',
+        'attr' => 'urn:oid:1.2.34.5',
+        'value' => 'CN=foo,OU=bar,OU=baz',
       ],
       [
         'rid' => 'webmaster',
-        'dn' => 'CN=foo,OU=bar',
+        'attr' => 'urn:oid:1.2.34.5',
+        'value' => 'CN=foo,OU=bar',
       ],
       [
         'rid' => 'webmaster',
-        'dn' => 'CN=baz,OU=qux',
+        'attr' => 'urn:oid:1.2.34.56789.10',
+        'value' => 'CN=baz,OU=qux',
       ],
     ];
 
     $i = 0;
 
-    foreach (RoleMappings::generate($mappings) as $rid => $dn) {
-      $this->assertEquals($expected[$i]['rid'], $rid);
-      $this->assertEquals($expected[$i]['dn'], $dn);
+    foreach (RoleMappings::generate($mappings) as $mapping) {
+      $this->assertEquals($expected[$i]['rid'], $mapping['rid']);
+      $this->assertEquals($expected[$i]['attr'], $mapping['attr']);
+      $this->assertEquals($expected[$i]['value'], $mapping['value']);
       $i++;
     }
   }

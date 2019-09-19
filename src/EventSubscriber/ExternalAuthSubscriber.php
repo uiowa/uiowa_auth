@@ -15,8 +15,25 @@ use Psr\Log\LoggerInterface;
  */
 class ExternalAuthSubscriber implements EventSubscriberInterface {
 
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The externalauth authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
 
   /**
@@ -60,14 +77,14 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
       'uiowa_auth_mappings' => [],
     ];
 
-    foreach (RoleMappings::generate($mappings) as $rid => $dn) {
-      if ($account->hasRole($rid)) {
-        $data['uiowa_auth_mappings'][] = $rid;
+    foreach (RoleMappings::generate($mappings) as $mapping) {
+      if ($account->hasRole($mapping['rid'])) {
+        $data['uiowa_auth_mappings'][] = $mapping['rid'];
       }
     }
 
     $this->authmap->save($account, $provider, $authname, $data);
-    $this->logger->notice('Saved role mappings for @user to authmap table.', ['@user' => $authname]);
+    $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
   }
 
 }

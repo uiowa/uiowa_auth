@@ -18,9 +18,32 @@ use Psr\Log\LoggerInterface;
  */
 class SamlauthSubscriber implements EventSubscriberInterface {
 
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
+
+  /**
+   * The logger service.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
+
+  /**
+   * The extnernalauth authmap service.
+   *
+   * @var \Drupal\externalauth\Authmap
+   */
   protected $authmap;
+
+  /**
+   * The EntityTypeManager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManager
+   */
   protected $entityTypeManager;
 
   /**
@@ -74,17 +97,17 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       }
     }
 
-    $attr = $this->config->get('uiowa_auth.settings')->get('member_of_attribute');
-    $member_of = $attributes[$attr];
     $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
-    foreach (RoleMappings::generate($mappings) as $rid => $dn) {
-      if (!$account->hasRole($rid) && in_array($dn, $member_of)) {
-        $account->addRole($rid);
-        $this->logger->notice('Assigned role @role for user @user based on mapping @dn.', [
-          '@role' => $rid,
+    foreach (RoleMappings::generate($mappings) as $mapping) {
+      if (!$account->hasRole($mapping['rid']) && in_array($mapping['value'], $attributes[$mapping['attr']])) {
+        $account->addRole($mapping['rid']);
+
+        $this->logger->notice('Assigned role @role for user @user based on mapping @attr => @value.', [
+          '@role' => $mapping['rid'],
           '@user' => $account->getAccountName(),
-          '@dn' => $dn,
+          '@attr' => $mapping['attr'],
+          '@value' => $mapping['value'],
         ]);
       }
     }
@@ -99,7 +122,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
    * @param \Drupal\samlauth\Event\SamlauthUserLinkEvent $event
    *   The SamlauthUserLinkEvent.
    *
-   * @throws ExternalAuthRegisterException
+   * @throws \Drupal\externalauth\Exception\ExternalAuthRegisterException
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
@@ -115,8 +138,8 @@ class SamlauthSubscriber implements EventSubscriberInterface {
      * This prevents any HawkID user from creating an account with no role.
      */
     if (!$event->getLinkedAccount()) {
-      $attr = $this->config->get('samlauth.authentication')->get('user_name_attribute');
-      $authname = $attributes[$attr][0];
+      $name = $this->config->get('samlauth.authentication')->get('user_name_attribute');
+      $authname = $attributes[$name][0];
 
       /* @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
       $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $authname]);
@@ -129,18 +152,17 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       }
       else {
         // Allow account creation if at least one role mapping is valid.
-        $attr = $this->config->get('uiowa_auth.settings')->get('member_of_attribute');
-        $member_of = $attributes[$attr];
         $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
-        foreach (RoleMappings::generate($mappings) as $rid => $dn) {
-          if (in_array($dn, $member_of)) {
+        foreach (RoleMappings::generate($mappings) as $mapping) {
+          if (in_array($mapping['value'], $attributes[$mapping['attr']])) {
             $sync = TRUE;
 
-            $this->logger->notice('User @user has valid role mapping @rid => @dn. Allowing account creation.', [
+            $this->logger->notice('User @user has valid mapping @attr => @value for role @rid. Allowing account creation.', [
               '@user' => $authname,
-              '@rid' => $rid,
-              '@dn' => $dn,
+              '@attr' => $mapping['attr'],
+              '@value' => $mapping['value'],
+              '@rid' => $mapping['rid'],
             ]);
           }
         }
