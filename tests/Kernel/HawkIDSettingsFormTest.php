@@ -24,20 +24,17 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
     $form = [];
 
     $form_state->setValues([
-      'role_mappings' => 'admin|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|CN=foo,OU=bar' . PHP_EOL . 'webmaster|CN=baz,OU=qux',
-      'member_of_attribute' => 'baz',
+      'role_mappings' => 'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz' . PHP_EOL . 'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar' . PHP_EOL . 'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux',
     ]);
 
     $hawkid_settings_form->submitForm($form, $form_state);
     $this->assertEquals(FALSE, $form_state->hasAnyErrors());
 
     $this->assertEquals([
-      'admin|CN=foo,OU=bar,OU=baz',
-      'webmaster|CN=foo,OU=bar',
-      'webmaster|CN=baz,OU=qux',
+      'admin|urn:oid:1.2.34.5|CN=foo,OU=bar,OU=baz',
+      'webmaster|urn:oid:1.2.34.5|CN=foo,OU=bar',
+      'webmaster|urn:oid:1.2.34.56789.10|CN=baz,OU=qux',
     ], $factory->get('uiowa_auth.settings')->get('role_mappings'));
-
-    $this->assertEquals('baz', $factory->get('uiowa_auth.settings')->get('member_of_attribute'));
   }
 
   /**
@@ -53,7 +50,6 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
 
     $form_state->setValues([
       'role_mappings' => $mapping,
-      'member_of_attribute' => 'baz',
     ]);
 
     $hawkid_settings_form->validateForm($form, $form_state);
@@ -69,12 +65,16 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
   public function invalidValues() {
     return [
       [
-        'CN=foo,OU=bar,OU=baz',
-        'Mapping CN=foo,OU=bar,OU=baz does not contain a pipe character (|).',
+        'foo|bar',
+        'Invalid role mapping foo|bar. Ensure the mapping follows the rid|attr|value format.',
       ],
       [
-        'CN=foo|OU=bar|OU=baz',
-        'Mapping CN=foo|OU=bar|OU=baz contains more than one pipe character (|). Separate multiple mappings with a return.',
+        'foo|OU=bar,OU=baz',
+        'Invalid role mapping foo|OU=bar,OU=baz. Ensure the mapping follows the rid|attr|value format.',
+      ],
+      [
+        'CN=foo|OU=bar,OU=baz|qux|quz',
+        'Invalid role mapping CN=foo|OU=bar,OU=baz|qux|quz. Ensure the mapping follows the rid|attr|value format.',
       ],
     ];
   }
