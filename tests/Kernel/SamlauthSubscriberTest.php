@@ -12,8 +12,11 @@ use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
  * @group kernel
  */
 class SamlauthSubscriberTest extends EntityKernelTestBase {
-
-  protected $strictConfigSchema = FALSE;
+  /**
+   * The config service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
   protected $config;
 
   /**
