@@ -67,7 +67,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
     }
 
     $this->authmap->save($account, $provider, $authname, $data);
-    $this->logger->notice('Saved role mappings for @user to authmap table.', ['@user' => $authname]);
+    $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
   }
 
 }
