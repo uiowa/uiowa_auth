@@ -33,30 +33,16 @@ class HawkIDSettingsForm extends ConfigFormBase {
 
     $text = RoleMappings::arrayToText($mappings);
 
-    $form['description'] = [
-      '#markup' => $this->t('HawkID authenticated users can have a member-of
-      attribute set representing group membership. Roles can be mapped
-      automatically based on the distinguished names (DN) in that
-      attribute. Roles will be re-evaluated upon each login and
-      assigned/revoked, accordingly. DNs must match exactly.'),
-    ];
-
     $form['role_mappings'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Role mappings'),
-      '#description' => $this->t('Enter role mappings in the format rid|dn
-       where rid is the machine name of the role and dn is the distinguished
-       name to match on the member_of attribute.
-       Ex. webmaster|CN=MyGroup,OU=Groups,OU=MyDomain,DC=iowa,DC=uiowa,DC=edu.
-       Separate multiple mappings with a return.'),
+      '#description' => $this->t('Enter role mappings in the format
+      rid|attr|value where rid is the machine name of the role, attr is the SAML
+       attribute to parse and value is what to match in the attribute.
+       Ex. webmaster|urn:oid:2.5.4.31|CN=MyGroup,OU=Groups,OU=MyDomain,DC=iowa,DC=uiowa,DC=edu.
+       Separate multiple mappings with a return. <strong>Note</strong> that the
+       value must match exactly.'),
       '#default_value' => $text,
-    ];
-
-    $form['member_of_attribute'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Member-of attribute'),
-      '#description' => $this->t('The attribute name to parse for member-of values in the SAML response.'),
-      '#default_value' => $this->config('uiowa_auth.settings')->get('member_of_attribute'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -71,12 +57,9 @@ class HawkIDSettingsForm extends ConfigFormBase {
     foreach ($mappings as $mapping) {
       $parts = explode('|', $mapping);
 
-      if (count($parts) == 1) {
-        $form_state->setErrorByName('role_mappings', $this->t('Mapping @mapping does not contain a pipe character (|).', ['@mapping' => $mapping]));
-      }
-
-      if (count($parts) > 2) {
-        $form_state->setErrorByName('role_mappings', $this->t('Mapping @mapping contains more than one pipe character (|). Separate multiple mappings with a return.', ['@mapping' => $mapping]));
+      // Each mapping should have three parts, i.e. two pipes.
+      if (count($parts) != 3) {
+        $form_state->setErrorByName('role_mappings', $this->t('Invalid role mapping @mapping. Ensure the mapping follows the rid|attr|value format.', ['@mapping' => $mapping]));
       }
     }
 
@@ -91,7 +74,6 @@ class HawkIDSettingsForm extends ConfigFormBase {
 
     $this->config('uiowa_auth.settings')
       ->set('role_mappings', $mappings)
-      ->set('member_of_attribute', $form_state->getValue('member_of_attribute'))
       ->save();
 
     parent::submitForm($form, $form_state);
