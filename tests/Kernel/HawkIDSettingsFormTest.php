@@ -12,6 +12,12 @@ use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
  * @group kernel
  */
 class HawkIDSettingsFormTest extends EntityKernelTestBase {
+  /**
+   * Modules to enable.
+   *
+   * @var array
+   */
+  public static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
 
   /**
    * Test form submits with valid values.
