@@ -41,8 +41,8 @@ class RoleMappings {
     $text = '';
 
     foreach ($mappings as $mapping) {
-      list($rid, $dn) = explode('|', $mapping);
-      $text .= "{$rid}|{$dn}";
+      list($rid, $attr, $value) = explode('|', $mapping);
+      $text .= "{$rid}|{$attr}|{$value}";
       $text .= PHP_EOL;
     }
 
