@@ -85,6 +85,8 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       'editor|groups|DN=edit',
     ])->save();
 
+    $this->config->getEditable('uiowa_auth.settings')->set('allow_all', FALSE)->save();
+
     $this->logger = $this->createMock('Psr\Log\LoggerInterface');
     $this->authmap = $this->container->get('externalauth.authmap');
     $this->entityTypeManager = $this->container->get('entity_type.manager');
@@ -208,7 +210,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
   /**
    * Test unlinked account does not get created.
    */
-  public function testUserLinkFailsForUnlinkedAccountWithNoMappings() {
+  public function testUserLinkFailsForUnlinkedAccountWithAllowAllSetToFalse() {
     $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
     $event = $this->createMock('Drupal\samlauth\Event\SamlauthUserLinkEvent');
 
@@ -225,6 +227,32 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
 
     $this->setExpectedException('Drupal\externalauth\Exception\ExternalAuthRegisterException');
     $sut->onUserLink($event);
+  }
+
+  /**
+   * Test unlinked account proceeds when configured to do so.
+   */
+  public function testUserDoesNotFailForUnlinkedAccountWithAllowAllSetToTrue() {
+    $sut = new SamlauthSubscriber($this->config, $this->logger, $this->authmap, $this->entityTypeManager);
+    $event = $this->createMock('Drupal\samlauth\Event\SamlauthUserLinkEvent');
+
+    $event->expects($this->any())
+      ->method('getAttributes')
+      ->will($this->returnValue([
+        'name' => ['foo'],
+        'groups' => [],
+      ]));
+
+    $event->expects($this->any())
+      ->method('getLinkedAccount')
+      ->will($this->returnValue(NULL));
+
+    $this->config->getEditable('uiowa_auth.settings')->set('allow_all', TRUE)->save();
+
+    $sut->onUserLink($event);
+
+    // Test that an exception is not thrown, i.e. this code runs.
+    $this->addToAssertionCount(1);
   }
 
 }
