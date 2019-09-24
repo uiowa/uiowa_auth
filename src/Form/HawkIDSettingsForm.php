@@ -45,6 +45,15 @@ class HawkIDSettingsForm extends ConfigFormBase {
       '#default_value' => $text,
     ];
 
+    $form['allow_all'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow all valid HawkIDs to authenticate'),
+      '#description' => $this->t('If checked, this feature allows anyone
+       with a valid HawkID to authenticate. This means they will be assigned
+       the "authenticated user" role.'),
+      '#default_value' => $this->config('uiowa_auth.settings')->get('allow_all'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -74,6 +83,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
 
     $this->config('uiowa_auth.settings')
       ->set('role_mappings', $mappings)
+      ->set('allow_all', $form_state->getValue('allow_all'))
       ->save();
 
     parent::submitForm($form, $form_state);
