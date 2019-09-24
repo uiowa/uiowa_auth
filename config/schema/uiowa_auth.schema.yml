@@ -7,3 +7,6 @@ uiowa_auth.settings:
       type: sequence
       sequence:
         - type: string
+    allow_all:
+      label: 'Whether or not to allow all valid HawkID users to authenticate'
+      type: boolean
