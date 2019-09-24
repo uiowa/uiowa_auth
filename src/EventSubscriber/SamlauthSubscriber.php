@@ -173,7 +173,14 @@ class SamlauthSubscriber implements EventSubscriberInterface {
           '@hawkid' => $authname,
         ]);
 
-        throw new ExternalAuthRegisterException();
+        if ($this->config->get('uiowa_auth.settings')->get('allow_all') == TRUE) {
+          $this->logger->error('Module configured to allow all valid HawkID users to authenticate. Proceeding.', [
+            '@hawkid' => $authname,
+          ]);
+        }
+        else {
+          throw new ExternalAuthRegisterException();
+        }
       }
     }
   }
