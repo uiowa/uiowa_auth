@@ -31,7 +31,12 @@ class HawkIDSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $mappings = $this->config('uiowa_auth.settings')->get('role_mappings');
 
-    $text = RoleMappings::arrayToText($mappings);
+    if (is_array($mappings)) {
+      $text = RoleMappings::arrayToText($mappings);
+    }
+    else {
+      $text = NULL;
+    }
 
     $form['role_mappings'] = [
       '#type' => 'textarea',
