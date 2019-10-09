@@ -13,14 +13,14 @@ Install with Composer, see http://drupal.org/node/1897420 for further informatio
 Configure the samlauth module as per the metadata. If using the aggregate metadata provided by ITS, a good starting point is https://github.com/uiowa/uiowa/blob/master/docroot/profiles/custom/sitenow/config/sync/samlauth.authentication.yml. Note the empty strings set for sp_x509_certificate and sp_private_key. This is to prevent the samlauth module from reverting to the keys residing in a directory.
 
 Certain configuration items are blank to avoid exposing sensitive information. The following configuration items should be set using [configuration overrides](https://www.drupal.org/docs/8/api/configuration-api/configuration-override-system):
-
+```
 idp_entity_id
 idp_single_sign_on_service
 idp_single_log_out_service
 sp_entity_id
 sp_x509_certificate
 sp_private_key
-
+```
 If deploying to Acquia Cloud, an easy way to do this is with a [secrets.settings.php](https://docs.acquia.com/resource/secrets/) file. This file is loaded automatically in an [Acquia BLT](https://docs.acquia.com/blt/) based project.
 
 ## Contact
