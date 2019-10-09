@@ -21,7 +21,7 @@ sp_entity_id
 sp_x509_certificate
 sp_private_key
 
-If deploying to Acquia Cloud, an easy way to do this is via https://docs.acquia.com/resource/secrets/. This file loaded automatically in an [Acquia BLT](https://docs.acquia.com/blt/) based project.
+If deploying to Acquia Cloud, an easy way to do this is via https://docs.acquia.com/resource/secrets/. This file is loaded automatically in an [Acquia BLT](https://docs.acquia.com/blt/) based project.
 
 ## Contact
 Please contact the [ITS Help Desk](https://its.uiowa.edu/contact) for any support related to this module.
