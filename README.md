@@ -20,6 +20,7 @@ idp_single_log_out_service
 sp_entity_id
 sp_x509_certificate
 sp_private_key
+idp_x509_certificate
 ```
 If deploying to Acquia Cloud, an easy way to do this is with a [secrets.settings.php](https://docs.acquia.com/resource/secrets/) file. This file is loaded automatically in an [Acquia BLT](https://docs.acquia.com/blt/) based project.
 
