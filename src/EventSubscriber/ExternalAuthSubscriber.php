@@ -80,11 +80,9 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
     foreach (RoleMappings::generate($mappings) as $mapping) {
       $role = $mapping['rid'];
 
-      // The authmap role mappings data is keyed by rid which overwrites
-      // role mappings to the same rid. This is desired since we only need to
-      // add the role once, i.e. not revoke multiple times.
-      if ($account->hasRole($role)) {
-        $data['uiowa_auth_mappings'][$role] = $role;
+      // Add the role once, i.e. do not revoke multiple times.
+      if ($account->hasRole($role) && !in_array($role, $data['uiowa_auth_mappings'])) {
+        $data['uiowa_auth_mappings'][] = $role;
       }
     }
 
