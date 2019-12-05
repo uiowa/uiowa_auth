@@ -110,4 +110,5 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
     $count = array_count_values($data['uiowa_auth_mappings']);
     $this->assertEquals(1, $count['webmaster']);
   }
+
 }
