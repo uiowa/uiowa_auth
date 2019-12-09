@@ -37,6 +37,11 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    */
   protected $authmap;
 
+  /**
+   * The samlauth service.
+   *
+   * @var \Drupal\samlauth\SamlService
+   */
   protected $saml;
 
   /**
@@ -48,6 +53,8 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    *   Logger interface.
    * @param \Drupal\externalauth\Authmap $authmap
    *   Authmap service.
+   * @param \Drupal\samlauth\SamlService $saml
+   *   Samlauth service.
    */
   public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap, SamlService $saml) {
     $this->config = $config_factory->get('uiowa_auth.settings');
