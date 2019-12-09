@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\uiowa_auth\RoleMappings;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
+use Drupal\samlauth\SamlService;
 
 /**
  * The uiowa event subscriber.
@@ -37,6 +38,13 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
   protected $authmap;
 
   /**
+   * The samlauth service.
+   *
+   * @var \Drupal\samlauth\SamlService
+   */
+  protected $saml;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -45,11 +53,14 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    *   Logger interface.
    * @param \Drupal\externalauth\Authmap $authmap
    *   Authmap service.
+   * @param \Drupal\samlauth\SamlService $saml
+   *   Samlauth service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap) {
+  public function __construct(ConfigFactoryInterface $config_factory, LoggerInterface $logger, Authmap $authmap, SamlService $saml) {
     $this->config = $config_factory->get('uiowa_auth.settings');
     $this->logger = $logger;
     $this->authmap = $authmap;
+    $this->saml = $saml;
   }
 
   /**
@@ -67,27 +78,41 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    *   The ExternalAuthLoginEvent.
    */
   public function onUserLogin(ExternalAuthLoginEvent $event) {
-    $account = $event->getAccount();
     $provider = $event->getProvider();
-    $authname = $event->getAuthname();
 
-    $mappings = $this->config->get('role_mappings');
+    if ($provider == 'samlauth') {
+      $account = $event->getAccount();
+      $authname = $event->getAuthname();
 
-    $data = [
-      'uiowa_auth_mappings' => [],
-    ];
+      // This will return the attributes for the current SAML response.
+      // @see: SamlService::acs().
+      $attributes = $this->saml->getAttributes();
+      $name = $this->saml->getAttributeByConfig('user_name_attribute');
 
-    foreach (RoleMappings::generate($mappings) as $mapping) {
-      $role = $mapping['rid'];
+      if ($name == $account->getUsername()) {
+        $mappings = $this->config->get('role_mappings');
 
-      // Add the role once, i.e. do not revoke multiple times.
-      if ($account->hasRole($role) && !in_array($role, $data['uiowa_auth_mappings'])) {
-        $data['uiowa_auth_mappings'][] = $role;
+        $data = [
+          'uiowa_auth_mappings' => [],
+        ];
+
+        foreach (RoleMappings::generate($mappings) as $mapping) {
+          if (in_array($mapping['value'], $attributes[$mapping['attr']])
+          && !in_array($mapping['rid'], $data['uiowa_auth_mappings'])) {
+            $data['uiowa_auth_mappings'][] = $mapping['rid'];
+          }
+        }
+
+        $this->authmap->save($account, $provider, $authname, $data);
+        $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
+      }
+      else {
+        $this->logger->error('Account @account name does not match SAML response attribute @name. Cannot save mapped roles.', [
+          '@account' => $account->getUsername(),
+          '@name' => $name,
+        ]);
       }
     }
-
-    $this->authmap->save($account, $provider, $authname, $data);
-    $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
   }
 
 }

@@ -11,7 +11,7 @@ services:
       - { name: event_subscriber }
   uiowa_auth.externalauth_subscriber:
     class: Drupal\uiowa_auth\EventSubscriber\ExternalAuthSubscriber
-    arguments: [ '@config.factory', '@logger.channel.uiowa_auth', '@externalauth.authmap' ]
+    arguments: [ '@config.factory', '@logger.channel.uiowa_auth', '@externalauth.authmap', '@samlauth.saml' ]
     tags:
       - { name: event_subscriber }
   uiowa_auth.route_subscriber:

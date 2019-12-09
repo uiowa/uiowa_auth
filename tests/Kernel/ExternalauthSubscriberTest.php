@@ -48,6 +48,13 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
   protected $event;
 
   /**
+   * The samlauth service.
+   *
+   * @var \Drupal\samlauth\SamlService
+   */
+  protected $saml;
+
+  /**
    * Modules to enable.
    *
    * @var array
@@ -85,12 +92,27 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
     $this->event->expects($this->any())
       ->method('getAuthname')
       ->will($this->returnValue('foo'));
+
+    $attributes = [
+      'name' => ['foo'],
+      'groups' => [
+        'DN=web',
+        'DN=foo',
+        'DN=bar',
+      ],
+    ];
+
+    $this->samlauth = $this->createMock('Drupal\samlauth\SamlService');
+
+    $this->samlauth->expects($this->any())
+      ->method('getAttributes')
+      ->will($this->returnValue($attributes));
   }
 
   /**
-   * Test that rids are stored only once in authmap data.
+   * Test integrity of authmap data.
    */
-  public function testAuthmapDataIsDeduped() {
+  public function testAuthmapData() {
     $account = User::create([
       'name' => $this->randomMachineName(),
       'status' => 1,
@@ -100,15 +122,43 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
     $account->addRole('editor');
     $account->save();
 
+    $this->samlauth->expects($this->any())
+      ->method('getAttributeByConfig')
+      ->will($this->returnValue($account->getUsername()));
+
     $this->event->expects($this->any())
       ->method('getAccount')
       ->will($this->returnValue($account));
 
-    $sut = new ExternalAuthSubscriber($this->config, $this->logger, $this->authmap);
+    $sut = new ExternalAuthSubscriber($this->config, $this->logger, $this->authmap, $this->samlauth);
     $sut->onUserLogin($this->event);
     $data = unserialize($this->authmap->getAuthData($account->id(), 'samlauth')['data']);
     $count = array_count_values($data['uiowa_auth_mappings']);
     $this->assertEquals(1, $count['webmaster']);
+    $this->assertArrayNotHasKey('editor', $count);
+  }
+
+  /**
+   * Test that no rids are stored when account names do not match SAML response.
+   */
+  public function testErrorLoggedWhenAccountNamesDoNotMatch() {
+    $account = User::create([
+      'name' => $this->randomMachineName(),
+      'status' => 1,
+    ]);
+
+    $this->samlauth->expects($this->any())
+      ->method('getAttributeByConfig')
+      ->will($this->returnValue('bogus'));
+
+    $this->event->expects($this->any())
+      ->method('getAccount')
+      ->will($this->returnValue($account));
+
+    $sut = new ExternalAuthSubscriber($this->config, $this->logger, $this->authmap, $this->samlauth);
+    $sut->onUserLogin($this->event);
+    $data = unserialize($this->authmap->getAuthData($account->id(), 'samlauth')['data']);
+    $this->assertEmpty($data);
   }
 
 }
