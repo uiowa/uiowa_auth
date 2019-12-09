@@ -1,8 +1,8 @@
 # uiowa_auth
-Disables Drupal authentication and implements HawkID SSO. 
+Disables Drupal authentication and implements HawkID SSO.
 
 ## Requirements
-This module requires [drupal/samlauth](https://www.drupal.org/project/samlauth) version ^3.0 or later and all it's dependencies. 
+This module requires [drupal/samlauth](https://www.drupal.org/project/samlauth) version ^3.0 or later and all it's dependencies.
 
 It also requires metadata describing the Service Provider (SP) endpoints to be consumed by the Identity Provider (IdP) in ITS. Drupal applications hosted in the uiowa subscription on Acquia Cloud can make use of an aggregate metadata file already in place. Please contact the ITS HelpDesk to get additional applications and domains added to the metadata.
 
@@ -28,13 +28,13 @@ If deploying to Acquia Cloud, an easy way to do this is with a [secrets.settings
 Please contact the [ITS Help Desk](https://its.uiowa.edu/contact) for any support related to this module.
 
 ## Tests
-Tests should be run from the root of a Drupal 8 installation against the 
+Tests should be run from the root of a Drupal 8 installation against the
 default site.
- 
+
 To run test locally:
 ```
 export SIMPLETEST_BASE_URL=http://localhost:8888
 export SIMPLETEST_DB=mysql://root@localhost/drupal
 export SYMFONY_DEPRECATIONS_HELPER=disabled
-./vendor/bin/phpunit -c docroot/core/ docroot/modules/custom/uiowa_auth/tests
+./vendor/bin/phpunit -c docroot/core/ path/to/uiowa_auth/tests
 ```
