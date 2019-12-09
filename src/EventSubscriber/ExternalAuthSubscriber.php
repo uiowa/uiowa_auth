@@ -71,28 +71,41 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
    *   The ExternalAuthLoginEvent.
    */
   public function onUserLogin(ExternalAuthLoginEvent $event) {
-    $account = $event->getAccount();
     $provider = $event->getProvider();
-    $authname = $event->getAuthname();
-    $attributes = $this->saml->getAttributes();
-    $this->logger->debug('<pre><code>' . print_r($attributes, TRUE) . '</code></pre>');
 
+    if ($provider == 'samlauth') {
+      $account = $event->getAccount();
+      $authname = $event->getAuthname();
 
-    $mappings = $this->config->get('role_mappings');
+      // This will return the attributes for the current SAML response.
+      // @see: SamlService::acs().
+      $attributes = $this->saml->getAttributes();
+      $name = $this->saml->getAttributeByConfig('user_name_attribute');
 
-    $data = [
-      'uiowa_auth_mappings' => [],
-    ];
+      if ($name == $account->getUsername()) {
+        $mappings = $this->config->get('role_mappings');
 
-    foreach (RoleMappings::generate($mappings) as $mapping) {
-      if (in_array($mapping['value'], $attributes[$mapping['attr']])) {
-        $this->logger->debug('<pre><code>' . print_r($attributes[$mapping['attr']], TRUE) . '</code></pre>');
-        $data['uiowa_auth_mappings'][] = $mapping['rid'];
+        $data = [
+          'uiowa_auth_mappings' => [],
+        ];
+
+        foreach (RoleMappings::generate($mappings) as $mapping) {
+          if (in_array($mapping['value'], $attributes[$mapping['attr']])
+          && !in_array($mapping['rid'], $data['uiowa_auth_mappings'])) {
+            $data['uiowa_auth_mappings'][] = $mapping['rid'];
+          }
+        }
+
+        $this->authmap->save($account, $provider, $authname, $data);
+        $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
+      }
+      else {
+        $this->logger->error('Account @account name does not match SAML response attribute @name. Cannot save mapped roles.', [
+          '@account' => $account->getUsername(),
+          '@name' => $name,
+        ]);
       }
     }
-
-    $this->authmap->save($account, $provider, $authname, $data);
-    $this->logger->notice('Saved mapped roles for @user to authmap table.', ['@user' => $authname]);
   }
 
 }
