@@ -15,7 +15,7 @@
         "phpunit/phpunit": "^6",
         "behat/mink": "^1.7",
         "behat/mink-goutte-driver": "^1.2",
-        "mikey179/vfsStream": "^1.6",
+        "mikey179/vfsstream": "^1.6",
         "symfony/phpunit-bridge": "^4.1"
     },
     "extra": {
@@ -35,5 +35,11 @@
         "post-install-cmd": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "Drupal\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/src/",
+            "Drupal\\Tests\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/tests/"
+        }
+    }
 }

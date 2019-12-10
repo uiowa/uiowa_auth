@@ -89,7 +89,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
       $attributes = $this->saml->getAttributes();
       $name = $this->saml->getAttributeByConfig('user_name_attribute');
 
-      if ($name == $account->getUsername()) {
+      if ($name == $account->getAccountName()) {
         $mappings = $this->config->get('role_mappings');
 
         $data = [
@@ -108,7 +108,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
       }
       else {
         $this->logger->error('Account @account name does not match SAML response attribute @name. Cannot save mapped roles.', [
-          '@account' => $account->getUsername(),
+          '@account' => $account->getAccountName(),
           '@name' => $name,
         ]);
       }
