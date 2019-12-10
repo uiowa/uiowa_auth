@@ -35,5 +35,11 @@
         "post-install-cmd": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "Drupal\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/src/",
+            "Drupal\\Tests\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/tests/"
+        }
+    }
 }
