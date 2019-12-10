@@ -34,7 +34,7 @@ install:
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
 script:
-  - drupal-check docroot/modules/custom/uiowa_auth/ --no-interaction
+  - drupal-check docroot/modules/custom/uiowa_auth/ --no-interaction --drupal-root docroot
   - export SIMPLETEST_BASE_URL=http://localhost:8080
   - export SIMPLETEST_DB=mysql://root@localhost/drupal
   - export SYMFONY_DEPRECATIONS_HELPER=disabled
