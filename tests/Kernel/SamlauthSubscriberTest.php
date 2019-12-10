@@ -223,7 +223,7 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
       ->method('getLinkedAccount')
       ->will($this->returnValue(NULL));
 
-    $this->setExpectedException('Drupal\externalauth\Exception\ExternalAuthRegisterException');
+    $this->expectException('Drupal\externalauth\Exception\ExternalAuthRegisterException');
     $sut->onUserLink($event);
   }
 
