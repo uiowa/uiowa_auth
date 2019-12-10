@@ -113,6 +113,7 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
    * Test integrity of authmap data.
    */
   public function testAuthmapData() {
+    /** @var \Drupal\user\UserInterface $account */
     $account = User::create([
       'name' => $this->randomMachineName(),
       'status' => 1,
@@ -124,7 +125,7 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
 
     $this->samlauth->expects($this->any())
       ->method('getAttributeByConfig')
-      ->will($this->returnValue($account->getUsername()));
+      ->will($this->returnValue($account->getAccountName()));
 
     $this->event->expects($this->any())
       ->method('getAccount')
