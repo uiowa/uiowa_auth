@@ -14,9 +14,10 @@ class LegacyLoginController extends ControllerBase {
    * Redirect users to the SAML login path.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   *   Throw an exception if the module is not configured to redirect.
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *  The redirect response.
+   *   The redirect response.
    */
   public function build() {
     $legacy_redirect = $this->config('uiowa_auth.settings')->get('legacy_redirect');
