@@ -16,7 +16,7 @@ class LegacyLoginController extends ControllerBase {
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    *
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *   An access denied exception is thrown if configuration dictates.
+   *  The redirect response.
    */
   public function build() {
     $legacy_redirect = $this->config('uiowa_auth.settings')->get('legacy_redirect');
