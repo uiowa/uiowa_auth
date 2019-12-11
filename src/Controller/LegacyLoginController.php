@@ -5,7 +5,19 @@ namespace Drupal\uiowa_auth\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/**
+ * Legacy login path controller.
+ */
 class LegacyLoginController extends ControllerBase {
+
+  /**
+   * Redirect users to the SAML login path.
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   An access denied exception is thrown if configuration dictates.
+   */
   public function build() {
     $legacy_redirect = $this->config('uiowa_auth.settings')->get('legacy_redirect');
 
