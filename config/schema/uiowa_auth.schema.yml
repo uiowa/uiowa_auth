@@ -7,3 +7,6 @@ uiowa_auth.settings:
       type: sequence
       sequence:
         - type: string
+    legacy_redirect:
+      label: 'Redirect legacy paths'
+      type: boolean
