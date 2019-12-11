@@ -36,11 +36,9 @@ class RouteSubscriber extends RouteSubscriberBase {
     }
 
     if ($route = $collection->get('user.login')) {
-      $route->setRequirement('_access', 'FALSE');
-    }
-
-    if ($route = $collection->get('user.login') && $this->user->isAnonymous()) {
-      $route->setPath('/saml/login');
+      $route->setDefaults([
+        '_controller' => 'Drupal\uiowa_auth\Controller\LegacyLoginController::build',
+      ]);
     }
   }
 
