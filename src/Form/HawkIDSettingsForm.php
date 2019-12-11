@@ -50,6 +50,14 @@ class HawkIDSettingsForm extends ConfigFormBase {
       '#default_value' => $text,
     ];
 
+    $form['legacy_redirect'] = [
+      '#type' => 'checkbox',
+      '#title' => 'Redirect legacy paths',
+      '#description' => $this->t('Redirect /user/login and /hawkid_login to the SAML login path.'),
+      '#return_value' => TRUE,
+      '#default_value' => $this->config('uiowa_auth.settings')->get('legacy_redirect'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -79,6 +87,7 @@ class HawkIDSettingsForm extends ConfigFormBase {
 
     $this->config('uiowa_auth.settings')
       ->set('role_mappings', $mappings)
+      ->set('legacy_redirect', $form_state->getValue('legacy_redirect'))
       ->save();
 
     parent::submitForm($form, $form_state);

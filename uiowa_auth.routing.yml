@@ -5,3 +5,9 @@ uiowa_auth.settings:
     _form: 'Drupal\uiowa_auth\Form\HawkIDSettingsForm'
   requirements:
     _permission: 'administer hawkid configuration'
+uiowa_auth.hawkid_login:
+  path: '/hawkid_login'
+  defaults:
+    _controller: Drupal\uiowa_auth\Controller\LegacyLoginController::build
+  requirements:
+    _user_is_logged_in: 'FALSE'
