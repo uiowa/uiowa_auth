@@ -3,7 +3,7 @@ sudo: false
 language: php
 
 php:
-  - '7.2'
+  - '7.3'
 
 cache:
   directories:
@@ -19,8 +19,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require mglaman/drupal-check
-  - composer global require drupal/coder
+  - composer global require mglaman/drupal-check drupal/coder
   - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
   - phpcs --config-set ignore_warnings_on_exit 1
   - phpcs --standard=Drupal,DrupalPractice . --ignore='*.css,*.md'
@@ -30,7 +29,7 @@ install:
   - mv tests/build ../ && cd ../build
   - export COMPOSER_HOME=$(pwd)
   - echo "{\"repositories\":$REPOS}" > config.json
-  - composer install --no-suggest
+  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-suggest
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
 script:
