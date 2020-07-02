@@ -3,7 +3,7 @@ sudo: false
 language: php
 
 php:
-  - '7.2'
+  - '7.3'
 
 cache:
   directories:
@@ -21,6 +21,7 @@ before_install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - composer global require mglaman/drupal-check
   - composer global require drupal/coder
+  - composer global require hirak/prestissimo
   - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
   - phpcs --config-set ignore_warnings_on_exit 1
   - phpcs --standard=Drupal,DrupalPractice . --ignore='*.css,*.md'
