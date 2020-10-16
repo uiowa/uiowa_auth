@@ -162,7 +162,12 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
    */
   public function testUserSyncGrantsRoleForExistingUser() {
     $account = $this->createUser();
-    $this->authmap->save($account, 'samlauth', 'foo', ['mapped' => ['webmaster', 'bar']]);
+    $this->authmap->save($account, 'samlauth', 'foo', [
+      'mapped' => [
+        'webmaster',
+        'bar',
+      ],
+    ]);
 
     $this->event->expects($this->any())
       ->method('getAccount')
@@ -179,7 +184,12 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
    */
   public function testUserSyncRevokesRoleForExistingUser() {
     $account = $this->createUser();
-    $this->authmap->save($account, 'samlauth', 'foo', ['mapped' => ['webmaster', 'foo']]);
+    $this->authmap->save($account, 'samlauth', 'foo', [
+      'mapped' => [
+        'webmaster',
+        'foo',
+      ],
+    ]);
 
     $attributes = [
       'name' => ['foo'],

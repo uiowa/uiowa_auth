@@ -92,7 +92,10 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       if (!empty($data['uiowa_auth_mappings'])) {
         foreach ($data['uiowa_auth_mappings'] as $rid) {
           $account->removeRole($rid);
-          $this->logger->notice('Revoked previously-mapped role @role for user @user so mapping is re-evaluated.', ['@role' => $rid, '@user' => $account->getAccountName()]);
+          $this->logger->notice('Revoked previously-mapped role @role for user @user so mapping is re-evaluated.', [
+            '@role' => $rid,
+            '@user' => $account->getAccountName(),
+          ]);
         }
       }
     }
@@ -141,7 +144,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
       $name = $this->config->get('samlauth.authentication')->get('user_name_attribute');
       $authname = $attributes[$name][0];
 
-      /* @var $search \Drupal\Core\Entity\EntityTypeInterface[] */
+      /** @var \Drupal\Core\Entity\EntityTypeInterface[] $search */
       $search = $this->entityTypeManager->getStorage('user')->loadByProperties(['name' => $authname]);
 
       if (!empty($search)) {

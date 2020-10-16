@@ -7,7 +7,7 @@ use Drupal\uiowa_auth\Form\HawkIDSettingsForm;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 
 /**
- * Class HawkIDSettingsFormTest.
+ * Test the HawkID settings form.
  *
  * @group kernel
  */
