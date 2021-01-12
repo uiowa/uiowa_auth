@@ -5,10 +5,6 @@ language: php
 php:
   - '7.3'
 
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 services:
   - mysql
 
@@ -18,22 +14,17 @@ matrix:
 before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require mglaman/drupal-check drupal/coder
-  - phpcs --config-set installed_paths ~/.composer/vendor/drupal/coder/coder_sniffer
-  - phpcs --config-set ignore_warnings_on_exit 1
-  - phpcs --standard=Drupal,DrupalPractice . --ignore='*.css,*.md'
 
 install:
-  - export REPOS=$(composer config repositories)
   - mv tests/build ../ && cd ../build
   - export COMPOSER_HOME=$(pwd)
-  - echo "{\"repositories\":$REPOS}" > config.json
-  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-suggest
+  - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
 script:
-  - drupal-check docroot/modules/custom/uiowa_auth/ --no-interaction --drupal-root docroot
+  - ./vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
+  - ./vendor/bin/phpcs --standard=Drupal,DrupalPractice docroot/modules/custom/uiowa_auth/ --ignore='*.css,*.md'
+  - ./vendor/bin/drupal-check docroot/modules/custom/uiowa_auth/ --no-interaction --drupal-root docroot
   - export SIMPLETEST_BASE_URL=http://localhost:8080
   - export SIMPLETEST_DB=mysql://root@localhost/drupal
   - export SYMFONY_DEPRECATIONS_HELPER=disabled

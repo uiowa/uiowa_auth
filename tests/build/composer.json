@@ -1,12 +1,12 @@
 {
     "repositories": {
-        "uiowa_auth": {
-            "type": "path",
-            "url": "../uiowa_auth"
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
         }
     },
     "require": {
-        "drupal-composer/drupal-scaffold": "^2.3",
+        "drupal/core-composer-scaffold": "^8.9",
         "drupal/core": "^8.9",
         "drush/drush": "^10",
         "uiowa/uiowa_auth": "*"
@@ -17,7 +17,9 @@
         "behat/mink-goutte-driver": "^1.2",
         "mikey179/vfsstream": "^1.6",
         "symfony/phpunit-bridge": "^4.1",
-        "hirak/prestissimo": "^0.3.10"
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "drupal/coder": "^8.3",
+        "mglaman/drupal-check": "^1.1"
     },
     "extra": {
         "installer-paths": {
@@ -29,6 +31,11 @@
             "drush/contrib/{$name}": ["type:drupal-drush"],
             "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
             "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"]
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "./docroot"
+            }
         }
     },
     "scripts": {
