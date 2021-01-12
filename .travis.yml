@@ -24,7 +24,7 @@ install:
   - mv tests/build ../ && cd ../build
   - export COMPOSER_HOME=$(pwd)
   - echo "{\"repositories\":$REPOS}" > config.json
-  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-suggest
+  - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
 script:
