@@ -8,8 +8,7 @@
     "require": {
         "drupal/core-composer-scaffold": "^8.9",
         "drupal/core": "^8.9",
-        "drush/drush": "^10",
-        "uiowa/uiowa_auth": "*"
+        "drush/drush": "^10"
     },
     "require-dev": {
         "phpunit/phpunit": "^6",

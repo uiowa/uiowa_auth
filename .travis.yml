@@ -18,6 +18,7 @@ before_install:
 install:
   - mv tests/build ../ && cd ../build
   - export COMPOSER_HOME=$(pwd)
+  - composer require uiowa/uiowa_auth:* --no-update
   - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 
