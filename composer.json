@@ -14,10 +14,5 @@
         "drupal/externalauth": "^1.1"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "drupal/coder": "^8.3",
-        "mglaman/drupal-check": "^1.1"
-    }
+    "prefer-stable": true
 }
