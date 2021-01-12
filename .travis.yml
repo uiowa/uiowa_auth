@@ -16,10 +16,8 @@ before_install:
   - composer self-update
 
 install:
-  - export REPOS=$(composer config repositories)
   - mv tests/build ../ && cd ../build
   - export COMPOSER_HOME=$(pwd)
-  - echo "{\"repositories\":$REPOS}" > config.json
   - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
 

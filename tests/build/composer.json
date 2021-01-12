@@ -1,8 +1,8 @@
 {
     "repositories": {
-        "uiowa_auth": {
-            "type": "path",
-            "url": "../uiowa_auth"
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
         }
     },
     "require": {
