@@ -10,7 +10,7 @@ class RoleMappings {
   /**
    * Static class.
    */
-  private function __construct() {}
+  public function __construct() {}
 
   /**
    * Convert string of line-break delimited role mappings to array.
