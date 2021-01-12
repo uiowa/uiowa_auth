@@ -7,7 +7,7 @@
     },
     "require": {
         "drupal/core-composer-scaffold": "^8.9",
-        "drupal/core": "^8.9",
+        "drupal/core": "^9.1",
         "drush/drush": "^10"
     },
     "require-dev": {
