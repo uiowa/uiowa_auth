@@ -3,16 +3,12 @@
 namespace Drupal\uiowa_auth;
 
 use Drupal\Core\Security\TrustedCallbackInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
+/**
+ * Provide pre-rendering for user login block.
+ */
 class UserLoginBlockPreRender implements TrustedCallbackInterface {
-
-  protected $account;
-
-  public function __construct(AccountInterface $account) {
-    $this->account = $account;
-  }
 
   /**
    * {@inheritdoc}
@@ -55,4 +51,5 @@ class UserLoginBlockPreRender implements TrustedCallbackInterface {
 
     return $build;
   }
+
 }
