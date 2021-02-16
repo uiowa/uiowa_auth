@@ -72,7 +72,7 @@ function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $fo
   $form['account']['mail']['#value'] = uniqid('email_') . '@uiowa.edu';
 
   // Hide the password field and generate a random one since it is never used.
-  $pass = user_password(mt_rand(50, 60));
+  $pass = \Drupal::service('password_generator')->generate();
   $form['account']['pass']['#access'] = FALSE;
 
   $form['account']['pass']['#value'] = [
