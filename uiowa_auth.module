@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\uiowa_auth\UserLoginBlockPreRender;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -91,7 +92,7 @@ function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $fo
  * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
 function uiowa_auth_block_view_user_login_block_alter(array &$build, BlockPluginInterface $block) {
-  $build['#pre_render'][] = Drupal\uiowa_auth\UserLoginBlockPreRender::class . '::preRender';
+  $build['#pre_render'][] = [UserLoginBlockPreRender::class, 'preRender'];
 }
 
 /**
