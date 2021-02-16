@@ -72,7 +72,7 @@ function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $fo
   $form['account']['mail']['#value'] = uniqid('email_') . '@uiowa.edu';
 
   // Hide the password field and generate a random one since it is never used.
-  $pass = user_password(mt_rand(50, 60));
+  $pass = \Drupal::service('password_generator')->generate(mt_rand(50, 60));
   $form['account']['pass']['#access'] = FALSE;
 
   $form['account']['pass']['#value'] = [
@@ -91,41 +91,7 @@ function uiowa_auth_form_user_register_form_alter(&$form, FormStateInterface $fo
  * Implements hook_block_view_BASE_BLOCK_ID_alter().
  */
 function uiowa_auth_block_view_user_login_block_alter(array &$build, BlockPluginInterface $block) {
-  $build['#pre_render'][] = '_uiowa_auth_user_login_block_pre_render';
-}
-
-/**
- * Pre-render callback for user_login_block.
- *
- * @param array $build
- *   The block build render array.
- *
- * @return array
- *   The render array.
- *
- * @see uiowa_auth_block_view_user_login_block_alter()
- */
-function _uiowa_auth_user_login_block_pre_render(array $build) {
-  if (\Drupal::currentUser()->isAnonymous()) {
-    if (isset($build['content']['user_links']['#items']['request_password'])) {
-      unset($build['content']['user_links']['#items']['request_password']);
-    }
-
-    $build['content']['hawkid'] = [
-      'message' => [
-        '#markup' => t('Click the link below to be redirected to the secure HawkID login page.'),
-        '#prefix' => '<p>',
-        '#suffix' => '</p>',
-      ],
-      'link' => [
-        '#type' => 'link',
-        '#title' => t('HawkID Login'),
-        '#url' => Url::fromRoute('samlauth.saml_controller_login'),
-      ],
-    ];
-
-    return $build;
-  }
+  $build['#pre_render'][] = Drupal\uiowa_auth\UserLoginBlockPreRender::class . '::preRender';
 }
 
 /**
