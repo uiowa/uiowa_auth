@@ -59,7 +59,7 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
+  protected static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
 
   /**
    * {@inheritdoc}
