@@ -66,12 +66,12 @@ class SamlauthSubscriberTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
+  protected static $modules = ['uiowa_auth', 'externalauth', 'samlauth'];
 
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     file_put_contents($this->root . '/../vendor/onelogin/php-saml/certs/idp.crt', 'foo');
     $this->installConfig(['uiowa_auth', 'externalauth', 'samlauth']);

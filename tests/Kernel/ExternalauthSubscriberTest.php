@@ -64,7 +64,7 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
     file_put_contents($this->root . '/../vendor/onelogin/php-saml/certs/idp.crt', 'foo');
     $this->installConfig(['uiowa_auth', 'externalauth', 'samlauth']);
