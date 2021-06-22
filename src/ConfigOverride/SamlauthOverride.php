@@ -31,7 +31,7 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
         }
       }
 
-      $overrides['samlauth.authentication']['map_user_roles'] = $allowed;
+      $overrides['samlauth.authentication']['map_users_roles'] = $allowed;
     }
 
     return $overrides;
