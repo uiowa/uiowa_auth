@@ -24,7 +24,11 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
 
       /** @var Role $role */
       foreach ($roles as $role) {
-          $allowed[$role->id()] = $role->id();
+        $id = $role->id();
+
+        if ($id != 'authenticated') {
+          $allowed[$id] = $id;
+        }
       }
 
       $overrides['samlauth.authentication']['map_user_roles'] = $allowed;
