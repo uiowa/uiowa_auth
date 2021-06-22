@@ -71,7 +71,18 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
     $this->installSchema('externalauth', ['authmap']);
 
     $this->config = $this->container->get('config.factory');
-    $this->config->getEditable('samlauth.authentication')->set('user_name_attribute', 'name')->save();
+    $this->config->getEditable('samlauth.authentication')
+      ->set('user_name_attribute', 'name')
+      ->set('idp_certs', [
+        'boguscertdata'
+      ])
+      ->set('idp_entity_id', 'bogus-idp-id')
+      ->set('idp_single_sign_on_service', 'https://bogus.uiowa.edu/sso')
+      ->set('idp_single_log_out_service', 'https://bogus.uiowa.edu/slo')
+      ->set('sp_entity_id', 'bogus-sp-id')
+      ->set('sp_x509_certificate', 'boguscertdata')
+      ->set('sp_private_key', 'bogusprivatekeydata')
+      ->save();
 
     $this->config->getEditable('uiowa_auth.settings')->set('role_mappings', [
       'webmaster|groups|DN=web',
