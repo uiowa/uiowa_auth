@@ -74,7 +74,7 @@ class ExternalauthSubscriberTest extends EntityKernelTestBase {
     $this->config->getEditable('samlauth.authentication')
       ->set('user_name_attribute', 'name')
       ->set('idp_certs', [
-        'boguscertdata'
+        'boguscertdata',
       ])
       ->set('idp_entity_id', 'bogus-idp-id')
       ->set('idp_single_sign_on_service', 'https://bogus.uiowa.edu/sso')

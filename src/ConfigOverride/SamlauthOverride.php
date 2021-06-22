@@ -5,12 +5,12 @@ namespace Drupal\uiowa_auth\ConfigOverride;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\user\Entity\Role;
 
 /**
  * Samlauth configuration overrides.
  */
 class SamlauthOverride implements ConfigFactoryOverrideInterface {
+
   /**
    * {@inheritdoc}
    */
@@ -22,7 +22,7 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
       $roles = user_roles(TRUE);
       $allowed = [];
 
-      /** @var Role $role */
+      /** @var \Drupal\user\Entity\Role $role */
       foreach ($roles as $role) {
         $id = $role->id();
 
