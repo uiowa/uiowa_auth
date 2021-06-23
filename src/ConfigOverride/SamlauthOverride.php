@@ -5,6 +5,7 @@ namespace Drupal\uiowa_auth\ConfigOverride;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
+use Drupal\user\Entity\Role;
 
 /**
  * Samlauth configuration overrides.
@@ -19,16 +20,19 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
 
     // Allow all roles to be linkable.
     if (in_array('samlauth.authentication', $names)) {
-      $roles = user_roles(TRUE);
+
+      $roles = Role::loadMultiple();
       $allowed = [];
 
       /** @var \Drupal\user\Entity\Role $role */
       foreach ($roles as $role) {
         $id = $role->id();
 
-        if ($id != 'authenticated') {
-          $allowed[$id] = $id;
+        if ($id == 'anonymous' || $id == 'authenticated') {
+          continue;
         }
+
+        $allowed[$id] = $id;
       }
 
       $overrides['samlauth.authentication']['map_users_roles'] = $allowed;
