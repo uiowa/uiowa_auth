@@ -19,3 +19,7 @@ services:
     arguments: [ '@current_user' ]
     tags:
       - { name: event_subscriber }
+  uiowa_auth.samlauth_override:
+    class: Drupal\uiowa_auth\ConfigOverride\SamlauthOverride
+    tags:
+      - { name: config.factory.override }
