@@ -1,0 +1,35 @@
+sudo: false
+
+language: php
+
+php:
+  - '7.3'
+
+services:
+  - mysql
+
+matrix:
+  fast_finish: true
+
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+
+install:
+  - mv tests/build ../ && cd ../build
+  - export COMPOSER_HOME=$(pwd)
+  - composer require uiowa/uiowa_auth:* --no-update
+  - COMPOSER_MEMORY_LIMIT=-1 composer install
+  - ./vendor/bin/drush --yes site:install testing --db-url=mysql://root@localhost/drupal --site-name=TravisCI
+
+script:
+  - ./vendor/bin/phpcs --config-set ignore_warnings_on_exit 1
+  - ./vendor/bin/phpcs --standard=Drupal,DrupalPractice docroot/modules/custom/uiowa_auth/ --ignore='*.css,*.md'
+  - ./vendor/bin/drupal-check docroot/modules/custom/uiowa_auth/ --no-interaction --drupal-root docroot
+  - export SIMPLETEST_BASE_URL=http://localhost:8080
+  - export SIMPLETEST_DB=mysql://root@localhost/drupal
+  - export SYMFONY_DEPRECATIONS_HELPER=disabled
+  - ./vendor/bin/drush runserver --default-server=builtin 8080 &
+  - sleep 3
+  - ./vendor/bin/phpunit -c docroot/core/ docroot/modules/custom/uiowa_auth/tests
+

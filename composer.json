@@ -1,0 +1,18 @@
+{
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "name": "uiowa/uiowa_auth",
+    "description": "Disables Drupal authentication and implements HawkID SSO.",
+    "type": "drupal-custom-module",
+    "require": {
+        "drupal/samlauth": "^3.3",
+        "composer/installers": "^1.6",
+        "drupal/externalauth": "^1.1"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
