@@ -1,0 +1,54 @@
+{
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    },
+    "require": {
+        "drupal/core-composer-scaffold": "^9.1",
+        "drupal/core": "^9.1",
+        "drush/drush": "^10"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "behat/mink": "^1.7",
+        "behat/mink-goutte-driver": "^1.2",
+        "mikey179/vfsstream": "^1.6",
+        "symfony/phpunit-bridge": "^5.2",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "drupal/coder": "^8.3",
+        "mglaman/drupal-check": "^1.1",
+        "oomphinc/composer-installers-extender": "^2.0",
+        "phpspec/prophecy-phpunit": "^2.0"
+    },
+    "extra": {
+        "installer-paths": {
+            "docroot/core": ["type:drupal-core"],
+            "docroot/libraries/{$name}": ["type:drupal-library"],
+            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+            "docroot/profiles/{$name}": ["type:drupal-profile"],
+            "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"],
+            "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
+            "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"]
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "./docroot"
+            }
+        }
+    },
+    "scripts": {
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "post-install-cmd": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload-dev": {
+        "psr-4": {
+            "Drupal\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/src/",
+            "Drupal\\Tests\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/tests/"
+        }
+    }
+}

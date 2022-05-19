@@ -1,0 +1,8 @@
+{
+  "repositories": {
+    "uiowa_auth": {
+      "type": "path",
+      "url": "../uiowa_auth"
+    }
+  }
+}
