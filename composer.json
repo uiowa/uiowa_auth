@@ -11,8 +11,14 @@
     "require": {
         "drupal/samlauth": "^3.3",
         "composer/installers": "^1.6",
-        "drupal/externalauth": "^1.1"
+        "drupal/externalauth": "^1.1",
+        "mglaman/drupal-check": "^1.1.7"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": false
+        }
+    }
 }
