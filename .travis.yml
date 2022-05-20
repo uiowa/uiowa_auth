@@ -16,7 +16,7 @@ before_install:
   - composer self-update
 
 install:
-  - mv tests/build ../ && cd ../build
+  - mv tests/src/build ../ && cd ../src/build
   - export COMPOSER_HOME=$(pwd)
   - composer require uiowa/uiowa_auth:* --no-update
   - COMPOSER_MEMORY_LIMIT=-1 composer install
