@@ -12,20 +12,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
  */
 class SamlauthOverride implements ConfigFactoryOverrideInterface {
   /**
-   * The entity_type.manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager) {
-    $this->entityTypeManager = $entityTypeManager;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function loadOverrides($names) {
@@ -34,7 +20,7 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
     // Allow all roles to be linkable.
     if (in_array('samlauth.authentication', $names)) {
 
-      $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
+      $roles = \Drupal::service('entity_type.manager')->getStorage('user_role')->loadMultiple();
       $allowed = [];
 
       /** @var \Drupal\user\Entity\Role $role */
