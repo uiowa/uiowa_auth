@@ -5,12 +5,12 @@ namespace Drupal\uiowa_auth\ConfigOverride;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryOverrideInterface;
 use Drupal\Core\Config\StorageInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Samlauth configuration overrides.
  */
 class SamlauthOverride implements ConfigFactoryOverrideInterface {
+
   /**
    * {@inheritdoc}
    */
