@@ -50,5 +50,10 @@
             "Drupal\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/src/",
             "Drupal\\Tests\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/tests/"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "drupal/core-composer-scaffold": true
+        }
     }
 }

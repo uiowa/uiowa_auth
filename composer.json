@@ -14,10 +14,5 @@
         "drupal/externalauth": "^1.1"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "allow-plugins": {
-            "drupal/core-composer-scaffold": true
-        }
-    }
+    "prefer-stable": true
 }
