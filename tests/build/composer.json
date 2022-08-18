@@ -18,7 +18,7 @@
         "symfony/phpunit-bridge": "^5.2",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
-        "mglaman/drupal-check": "^1.1",
+        "mglaman/drupal-check": "~1.3.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "phpspec/prophecy-phpunit": "^2.0"
     },
@@ -49,6 +49,14 @@
         "psr-4": {
             "Drupal\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/src/",
             "Drupal\\Tests\\uiowa_auth\\": "docroot/modules/custom/uiowa_auth/tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "oomphinc/composer-installers-extender": true
         }
     }
 }
