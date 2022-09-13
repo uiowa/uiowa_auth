@@ -10,9 +10,14 @@
     "type": "drupal-custom-module",
     "require": {
         "drupal/samlauth": "^3.3",
-        "composer/installers": "^1.6",
+        "composer/installers": "^2.1",
         "drupal/externalauth": "^1.1"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }
