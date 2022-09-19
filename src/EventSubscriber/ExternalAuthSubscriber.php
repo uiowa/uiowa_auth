@@ -80,7 +80,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
   public function onUserLogin(ExternalAuthLoginEvent $event) {
     $provider = $event->getProvider();
 
-    if ($provider == 'samlauth') {
+    if ($provider === 'samlauth') {
       $account = $event->getAccount();
       $authname = $event->getAuthname();
 
@@ -89,7 +89,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
       $attributes = $this->saml->getAttributes();
       $name = $this->saml->getAttributeByConfig('user_name_attribute');
 
-      if ($name == $account->getAccountName()) {
+      if ($name === $account->getAccountName()) {
         $mappings = $this->config->get('role_mappings');
 
         $data = [

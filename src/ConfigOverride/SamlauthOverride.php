@@ -27,7 +27,7 @@ class SamlauthOverride implements ConfigFactoryOverrideInterface {
       foreach ($roles as $role) {
         $id = $role->id();
 
-        if ($id == 'anonymous' || $id == 'authenticated') {
+        if ($id === 'anonymous' || $id === 'authenticated') {
           continue;
         }
 
