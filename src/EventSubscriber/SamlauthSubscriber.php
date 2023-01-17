@@ -103,7 +103,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
     $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
     foreach (RoleMappings::generate($mappings) as $mapping) {
-      if (!$account->hasRole($mapping['rid']) && in_array($mapping['value'], $attributes[$mapping['attr']])) {
+      if (!$account->hasRole($mapping['rid']) && in_array($mapping['value'], $attributes[$mapping['attr']] ?? [])) {
         $account->addRole($mapping['rid']);
 
         $this->logger->notice('Assigned role @role for user @user based on mapping @attr => @value.', [
