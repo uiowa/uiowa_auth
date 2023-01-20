@@ -103,15 +103,17 @@ class SamlauthSubscriber implements EventSubscriberInterface {
     $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
     foreach (RoleMappings::generate($mappings) as $mapping) {
-      if (!$account->hasRole($mapping['rid']) && in_array($mapping['value'], $attributes[$mapping['attr']])) {
-        $account->addRole($mapping['rid']);
+      if (!$account->hasRole($mapping['rid'])) {
+        if (is_array($attributes[$mapping['attr']]) && in_array($mapping['value'], $attributes[$mapping['attr']])) {
+          $account->addRole($mapping['rid']);
 
-        $this->logger->notice('Assigned role @role for user @user based on mapping @attr => @value.', [
-          '@role' => $mapping['rid'],
-          '@user' => $account->getAccountName(),
-          '@attr' => $mapping['attr'],
-          '@value' => $mapping['value'],
-        ]);
+          $this->logger->notice('Assigned role @role for user @user based on mapping @attr => @value.', [
+            '@role' => $mapping['rid'],
+            '@user' => $account->getAccountName(),
+            '@attr' => $mapping['attr'],
+            '@value' => $mapping['value'],
+          ]);
+        }
       }
     }
 
@@ -158,15 +160,17 @@ class SamlauthSubscriber implements EventSubscriberInterface {
         $mappings = $this->config->get('uiowa_auth.settings')->get('role_mappings');
 
         foreach (RoleMappings::generate($mappings) as $mapping) {
-          if (in_array($mapping['value'], $attributes[$mapping['attr']])) {
-            $sync = TRUE;
+          if (is_array($attributes[$mapping['attr']])) {
+            if (in_array($mapping['value'], $attributes[$mapping['attr']])) {
+              $sync = TRUE;
 
-            $this->logger->notice('User @user has valid mapping @attr => @value for role @rid. Allowing account creation.', [
-              '@user' => $authname,
-              '@attr' => $mapping['attr'],
-              '@value' => $mapping['value'],
-              '@rid' => $mapping['rid'],
-            ]);
+              $this->logger->notice('User @user has valid mapping @attr => @value for role @rid. Allowing account creation.', [
+                '@user' => $authname,
+                '@attr' => $mapping['attr'],
+                '@value' => $mapping['value'],
+                '@rid' => $mapping['rid'],
+              ]);
+            }
           }
         }
       }

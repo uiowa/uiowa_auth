@@ -97,9 +97,11 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
         ];
 
         foreach (RoleMappings::generate($mappings) as $mapping) {
-          if (in_array($mapping['value'], $attributes[$mapping['attr']])
-          && !in_array($mapping['rid'], $data['uiowa_auth_mappings'])) {
-            $data['uiowa_auth_mappings'][] = $mapping['rid'];
+          if (is_array($attributes[$mapping['attr']])) {
+            if (in_array($mapping['value'], $attributes[$mapping['attr']])
+              && !in_array($mapping['rid'], $data['uiowa_auth_mappings'])) {
+              $data['uiowa_auth_mappings'][] = $mapping['rid'];
+            }
           }
         }
 
