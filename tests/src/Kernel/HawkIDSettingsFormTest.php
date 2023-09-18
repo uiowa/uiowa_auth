@@ -3,8 +3,8 @@
 namespace Drupal\Tests\uiowa_auth\Kernel;
 
 use Drupal\Core\Form\FormState;
-use Drupal\uiowa_auth\Form\HawkIDSettingsForm;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
+use Drupal\uiowa_auth\Form\HawkIDSettingsForm;
 
 /**
  * Test the HawkID settings form.
