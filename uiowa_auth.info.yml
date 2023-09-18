@@ -2,7 +2,7 @@ name: UIowa Authentication
 type: module
 description: Disables Drupal authentication and implements HawkID SSO.
 package: University of Iowa
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 dependencies:
   - samlauth:samlauth
   - externalauth:externalauth

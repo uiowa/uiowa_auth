@@ -2,16 +2,16 @@
 
 namespace Drupal\uiowa_auth\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Exception\ExternalAuthRegisterException;
 use Drupal\samlauth\Event\SamlauthEvents;
-use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\samlauth\Event\SamlauthUserLinkEvent;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\uiowa_auth\RoleMappings;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * The uiowa event subscriber.
