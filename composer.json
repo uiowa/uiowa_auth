@@ -9,9 +9,9 @@
     "description": "Disables Drupal authentication and implements HawkID SSO.",
     "type": "drupal-custom-module",
     "require": {
-        "drupal/samlauth": "^3.3",
-        "composer/installers": "^2.1",
-        "drupal/externalauth": "^1.1"
+        "drupal/samlauth": "^3.9",
+        "composer/installers": "^2.2",
+        "drupal/externalauth": "^2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
