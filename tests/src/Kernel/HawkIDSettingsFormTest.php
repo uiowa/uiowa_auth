@@ -67,7 +67,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
    *
    * @see testInvalidHawkIdForm()
    */
-  public function invalidValues() {
+  public static function invalidValues() {
     return [
       [
         'foo|bar',
