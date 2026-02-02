@@ -28,8 +28,7 @@ If deploying to Acquia Cloud, an easy way to do this is with a [secrets.settings
 Please contact the [ITS Help Desk](https://its.uiowa.edu/contact) for any support related to this module.
 
 ## Tests
-Tests should be run from the root of a Drupal 9 installation against the
-default site.
+Tests should be run from the root of a Drupal 10+ installation against the default site.
 
 To run test locally:
 ```
