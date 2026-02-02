@@ -2,7 +2,7 @@
 Disables Drupal authentication and implements HawkID SSO.
 
 ## Requirements
-This module requires [drupal/samlauth](https://www.drupal.org/project/samlauth) version ^3.3 or later and all it's dependencies.
+This module requires [drupal/samlauth](https://www.drupal.org/project/samlauth) version ^3.13 or later and all it's dependencies.
 
 It also requires metadata describing the Service Provider (SP) endpoints to be consumed by the Identity Provider (IdP) in ITS. Drupal applications hosted in the uiowa subscription on Acquia Cloud can make use of an aggregate metadata file already in place. Please contact the ITS HelpDesk to get additional applications and domains added to the metadata.
 
