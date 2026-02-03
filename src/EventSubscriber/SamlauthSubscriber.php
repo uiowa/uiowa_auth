@@ -2,16 +2,16 @@
 
 namespace Drupal\uiowa_auth\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Exception\ExternalAuthRegisterException;
 use Drupal\samlauth\Event\SamlauthEvents;
-use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\samlauth\Event\SamlauthUserLinkEvent;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\samlauth\Event\SamlauthUserSyncEvent;
 use Drupal\uiowa_auth\RoleMappings;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * The uiowa event subscriber.
@@ -68,7 +68,7 @@ class SamlauthSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[SamlauthEvents::USER_SYNC][] = ['onUserSync'];
     $events[SamlauthEvents::USER_LINK][] = ['onUserLink'];
     return $events;

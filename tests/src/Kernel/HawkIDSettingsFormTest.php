@@ -3,8 +3,8 @@
 namespace Drupal\Tests\uiowa_auth\Kernel;
 
 use Drupal\Core\Form\FormState;
-use Drupal\uiowa_auth\Form\HawkIDSettingsForm;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
+use Drupal\uiowa_auth\Form\HawkIDSettingsForm;
 
 /**
  * Test the HawkID settings form.
@@ -67,7 +67,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
    *
    * @see testInvalidHawkIdForm()
    */
-  public function invalidValues() {
+  public static function invalidValues() {
     return [
       [
         'foo|bar',

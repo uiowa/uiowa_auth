@@ -2,14 +2,14 @@
 
 namespace Drupal\uiowa_auth\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\externalauth\Authmap;
 use Drupal\externalauth\Event\ExternalAuthEvents;
 use Drupal\externalauth\Event\ExternalAuthLoginEvent;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\uiowa_auth\RoleMappings;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Psr\Log\LoggerInterface;
 use Drupal\samlauth\SamlService;
+use Drupal\uiowa_auth\RoleMappings;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * The uiowa event subscriber.
@@ -66,7 +66,7 @@ class ExternalAuthSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[ExternalAuthEvents::LOGIN][] = ['onUserLogin'];
     return $events;
   }

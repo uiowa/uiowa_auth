@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\uiowa_auth\Kernel;
 
+use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\uiowa_auth\EventSubscriber\SamlauthSubscriber;
 use Drupal\user\Entity\User;
-use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 
 /**
  * Test description.
