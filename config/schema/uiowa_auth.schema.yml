@@ -6,7 +6,7 @@ uiowa_auth.settings:
       label: 'Role mappings'
       type: sequence
       sequence:
-        - type: string
+        type: string
     legacy_redirect:
       label: 'Redirect legacy paths'
       type: boolean
