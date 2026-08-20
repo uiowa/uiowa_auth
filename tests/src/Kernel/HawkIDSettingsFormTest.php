@@ -24,7 +24,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
    */
   public function testValidHawkIdForm() {
     $factory = $this->container->get('config.factory');
-    $hawkid_settings_form = new HawkIDSettingsForm($factory);
+    $hawkid_settings_form = HawkIDSettingsForm::create($this->container);
     $form_state = new FormState();
     $form = [];
 
@@ -48,8 +48,7 @@ class HawkIDSettingsFormTest extends EntityKernelTestBase {
    * @dataProvider invalidValues
    */
   public function testInvalidHawkIdForm($mapping, $message) {
-    $factory = $this->container->get('config.factory');
-    $hawkid_settings_form = new HawkIDSettingsForm($factory);
+    $hawkid_settings_form = HawkIDSettingsForm::create($this->container);
     $form_state = new FormState();
     $form = [];
 
