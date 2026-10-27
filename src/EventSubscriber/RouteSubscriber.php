@@ -31,8 +31,12 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    if ($route = $collection->get('user.pass')) {
-      $route->setRequirement('_access', 'FALSE');
+    // Block local password login and reset on both the HTML and JSON routes,
+    // so HawkID is the only way to log in.
+    foreach (['user.pass', 'user.pass.http', 'user.login.http'] as $name) {
+      if ($route = $collection->get($name)) {
+        $route->setRequirement('_access', 'FALSE');
+      }
     }
 
     if ($route = $collection->get('user.login')) {
